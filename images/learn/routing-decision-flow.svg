@@ -1,0 +1,38 @@
+<svg width="1200" height="460" viewBox="0 0 1200 460" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="460" rx="24" fill="#111216"/>
+  <text x="60" y="70" fill="#FFFFFF" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="700">Routing decision flow</text>
+  <text x="60" y="102" fill="#A7ADBB" font-family="Inter, Arial, sans-serif" font-size="16">The best route is the best executable route, not just the lowest displayed price.</text>
+  <g font-family="Inter, Arial, sans-serif">
+    <rect x="60" y="158" width="180" height="86" rx="12" fill="#20232B" stroke="#3A3E4C"/>
+    <text x="84" y="193" fill="#FFFFFF" font-size="17" font-weight="700">Single venue</text>
+    <text x="84" y="219" fill="#A7ADBB" font-size="14">Simple path</text>
+    <rect x="60" y="268" width="180" height="86" rx="12" fill="#20232B" stroke="#3A3E4C"/>
+    <text x="84" y="303" fill="#FFFFFF" font-size="17" font-weight="700">Pair route</text>
+    <text x="84" y="329" fill="#A7ADBB" font-size="14">Two venues</text>
+    <rect x="290" y="158" width="180" height="86" rx="12" fill="#20232B" stroke="#3A3E4C"/>
+    <text x="314" y="193" fill="#FFFFFF" font-size="17" font-weight="700">Tri route</text>
+    <text x="314" y="219" fill="#A7ADBB" font-size="14">Three venues</text>
+    <rect x="290" y="268" width="180" height="86" rx="12" fill="#20232B" stroke="#3A3E4C"/>
+    <text x="314" y="303" fill="#FFFFFF" font-size="17" font-weight="700">RFQ quote</text>
+    <text x="314" y="329" fill="#A7ADBB" font-size="14">LP liquidity</text>
+    <rect x="540" y="166" width="240" height="174" rx="14" fill="#17191F" stroke="#CCFF00"/>
+    <text x="568" y="208" fill="#CCFF00" font-size="18" font-weight="700">Routeability filter</text>
+    <text x="568" y="242" fill="#FFFFFF" font-size="14">Fresh quotes</text>
+    <text x="568" y="266" fill="#FFFFFF" font-size="14">Rules and shared core</text>
+    <text x="568" y="290" fill="#FFFFFF" font-size="14">Funding and signing</text>
+    <text x="568" y="314" fill="#FFFFFF" font-size="14">Slippage and policy</text>
+    <rect x="850" y="166" width="280" height="174" rx="14" fill="#0F251B" stroke="#1E8F5A"/>
+    <text x="878" y="208" fill="#CCFF00" font-size="18" font-weight="700">Best executable route</text>
+    <text x="878" y="244" fill="#DDFEE7" font-size="14">Selected only if it improves</text>
+    <text x="878" y="268" fill="#DDFEE7" font-size="14">the user outcome after fees,</text>
+    <text x="878" y="292" fill="#DDFEE7" font-size="14">slippage, and risk.</text>
+  </g>
+  <g stroke="#CCFF00" stroke-width="3" stroke-linecap="round">
+    <path d="M480 253H530"/>
+    <path d="M790 253H840"/>
+  </g>
+  <g fill="#CCFF00">
+    <path d="M530 253L519 247V259L530 253Z"/>
+    <path d="M840 253L829 247V259L840 253Z"/>
+  </g>
+</svg>

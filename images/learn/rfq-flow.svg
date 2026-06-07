@@ -1,0 +1,34 @@
+<svg width="1200" height="420" viewBox="0 0 1200 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="420" rx="24" fill="#111216"/>
+  <text x="60" y="70" fill="#FFFFFF" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="700">RFQ liquidity flow</text>
+  <text x="60" y="102" fill="#A7ADBB" font-family="Inter, Arial, sans-serif" font-size="16">LP quotes compete with venue books and only win when they improve the route.</text>
+  <g font-family="Inter, Arial, sans-serif">
+    <rect x="70" y="170" width="170" height="100" rx="12" fill="#20232B" stroke="#3A3E4C"/>
+    <text x="94" y="210" fill="#CCFF00" font-size="17" font-weight="700">Trader demand</text>
+    <text x="94" y="238" fill="#FFFFFF" font-size="14">Canonical market</text>
+    <rect x="300" y="170" width="170" height="100" rx="12" fill="#20232B" stroke="#3A3E4C"/>
+    <text x="324" y="210" fill="#CCFF00" font-size="17" font-weight="700">RFQ session</text>
+    <text x="324" y="238" fill="#FFFFFF" font-size="14">Open to LPs</text>
+    <rect x="530" y="170" width="170" height="100" rx="12" fill="#20232B" stroke="#3A3E4C"/>
+    <text x="554" y="210" fill="#CCFF00" font-size="17" font-weight="700">LP quotes</text>
+    <text x="554" y="238" fill="#FFFFFF" font-size="14">Price, size, fee</text>
+    <rect x="760" y="170" width="170" height="100" rx="12" fill="#17191F" stroke="#CCFF00"/>
+    <text x="784" y="210" fill="#CCFF00" font-size="17" font-weight="700">Router</text>
+    <text x="784" y="238" fill="#FFFFFF" font-size="14">Scores candidates</text>
+    <rect x="990" y="170" width="150" height="100" rx="12" fill="#0F251B" stroke="#1E8F5A"/>
+    <text x="1014" y="210" fill="#CCFF00" font-size="17" font-weight="700">Execution</text>
+    <text x="1014" y="238" fill="#DDFEE7" font-size="14">If routeable</text>
+  </g>
+  <g stroke="#CCFF00" stroke-width="3" stroke-linecap="round">
+    <path d="M250 220H290"/>
+    <path d="M480 220H520"/>
+    <path d="M710 220H750"/>
+    <path d="M940 220H980"/>
+  </g>
+  <g fill="#CCFF00">
+    <path d="M290 220L279 214V226L290 220Z"/>
+    <path d="M520 220L509 214V226L520 220Z"/>
+    <path d="M750 220L739 214V226L750 220Z"/>
+    <path d="M980 220L969 214V226L980 220Z"/>
+  </g>
+</svg>

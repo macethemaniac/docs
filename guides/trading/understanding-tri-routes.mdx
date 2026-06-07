@@ -1,5 +1,66 @@
 ---
-title: "Understanding Tri Routes"
+title: "Understanding tri routes"
+description: "How Lotus handles three-venue execution routes."
 ---
 
-A tri route splits across three venues. It unlocks liquidity pair routes can't reach — at the cost of more legs and higher coordination complexity. Lotus only picks a tri route when it strictly dominates available pairs.
+A tri route splits one order across three venues.
+
+Lotus uses tri routes only when the third venue improves the executable result after fees, slippage, and route risk. More venues are useful only when they make the user better off.
+
+![Routing decision flow](/images/learn/routing-decision-flow.svg)
+
+## When a tri route can help
+
+Tri routes are most useful for larger orders.
+
+As order size increases, a single venue can run out of good depth. A pair route may improve the trade, but still leave expensive shares at the end. A third venue can add another pool of liquidity and improve the blended average.
+
+Lotus should compare:
+
+- Best single-venue route.
+- Best pair route.
+- Best tri route.
+- Fees and slippage for every leg.
+- Settlement and execution risk for every leg.
+
+The tri route wins only if it beats the simpler options.
+
+## What you see
+
+The user experience should remain one order.
+
+The preview can show:
+
+- Route type: `TRI`.
+- Three venue legs.
+- Expected blended price.
+- Expected savings.
+- Required signatures.
+- Final receipt after execution.
+
+The receipt should explain each leg after the order completes.
+
+## Why tri routes are stricter
+
+Three legs means more possible failure points.
+
+Lotus must verify:
+
+- All three venue markets share the same outcome core.
+- All three quotes are fresh.
+- Every leg has an executable venue token or outcome ID.
+- Each venue supports the required submit path.
+- Funding or sellable position exists for every leg.
+- Settlement can be verified after execution.
+
+If any leg is unsafe, Lotus should fall back to a safer route or fail closed.
+
+## Common mistakes
+
+- Do not use tri routes just because an amount is large.
+- Do not ignore route risk. A slightly better price can be worse if execution becomes fragile.
+- Do not let a third venue route away from the selected canonical outcome.
+
+<Warning>
+  Tri routes should be strict. A partial or stale third leg can turn a good route into a bad execution.
+</Warning>

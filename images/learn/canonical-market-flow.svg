@@ -1,0 +1,37 @@
+<svg width="1200" height="430" viewBox="0 0 1200 430" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="430" rx="24" fill="#111216"/>
+  <text x="60" y="70" fill="#FFFFFF" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="700">Canonical market matching</text>
+  <text x="60" y="102" fill="#A7ADBB" font-family="Inter, Arial, sans-serif" font-size="16">Lotus groups venue markets only when the routeable overlap is clear.</text>
+  <g font-family="Inter, Arial, sans-serif">
+    <rect x="60" y="152" width="230" height="150" rx="14" fill="#20232B" stroke="#3A3E4C"/>
+    <text x="84" y="190" fill="#FFFFFF" font-size="18" font-weight="700">Venue markets</text>
+    <text x="84" y="222" fill="#A7ADBB" font-size="14">Polymarket</text>
+    <text x="84" y="246" fill="#A7ADBB" font-size="14">Limitless</text>
+    <text x="84" y="270" fill="#A7ADBB" font-size="14">Opinion / Predict</text>
+    <rect x="370" y="132" width="250" height="190" rx="14" fill="#17191F" stroke="#CCFF00"/>
+    <text x="394" y="172" fill="#CCFF00" font-size="18" font-weight="700">Compatibility checks</text>
+    <text x="394" y="208" fill="#FFFFFF" font-size="14">Outcome core</text>
+    <text x="394" y="232" fill="#FFFFFF" font-size="14">Resolution rules</text>
+    <text x="394" y="256" fill="#FFFFFF" font-size="14">Timing window</text>
+    <text x="394" y="280" fill="#FFFFFF" font-size="14">Source metadata</text>
+    <rect x="700" y="152" width="210" height="150" rx="14" fill="#20232B" stroke="#3A3E4C"/>
+    <text x="724" y="190" fill="#FFFFFF" font-size="18" font-weight="700">Shared core</text>
+    <text x="724" y="224" fill="#A7ADBB" font-size="14">Route only where</text>
+    <text x="724" y="248" fill="#A7ADBB" font-size="14">venues agree</text>
+    <rect x="970" y="152" width="170" height="150" rx="14" fill="#0F251B" stroke="#1E8F5A"/>
+    <text x="994" y="190" fill="#CCFF00" font-size="18" font-weight="700">Canonical</text>
+    <text x="994" y="216" fill="#CCFF00" font-size="18" font-weight="700">market</text>
+    <text x="994" y="250" fill="#DDFEE7" font-size="14">One market UI</text>
+    <text x="994" y="274" fill="#DDFEE7" font-size="14">many venues</text>
+  </g>
+  <g stroke="#CCFF00" stroke-width="3" stroke-linecap="round">
+    <path d="M300 226H360"/>
+    <path d="M630 226H690"/>
+    <path d="M920 226H960"/>
+  </g>
+  <g fill="#CCFF00">
+    <path d="M360 226L349 220V232L360 226Z"/>
+    <path d="M690 226L679 220V232L690 226Z"/>
+    <path d="M960 226L949 220V232L960 226Z"/>
+  </g>
+</svg>

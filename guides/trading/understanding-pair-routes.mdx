@@ -1,5 +1,56 @@
 ---
-title: "Understanding Pair Routes"
+title: "Understanding pair routes"
+description: "How Lotus decides when two venues are better than one."
 ---
 
-A pair route splits a trade across two venues. Lotus selects a pair route when the blended price across two venues beats any single-venue route after fees and slippage.
+A pair route splits one order across two venues.
+
+Lotus uses this when two venues give a better executable result than the best single venue after fees, slippage, depth, and route risk.
+
+![Routing decision flow](/images/learn/routing-decision-flow.svg)
+
+## What you see
+
+In the trade preview, a pair route should appear as one simple order.
+
+You may see:
+
+- The route type: `PAIR`.
+- The two venues used.
+- The expected average price.
+- Estimated savings versus a single-venue route.
+- Any required signature step.
+
+You do not need to place two separate orders.
+
+## Why Lotus uses two venues
+
+One venue can have the best visible price but not enough depth for the full order.
+
+For example, the first venue may sell 100 shares cheaply, then become expensive. A second venue may have better depth for the next part of the trade. Splitting across both can improve the average fill.
+
+Lotus compares the blended pair route against the best single venue before choosing it.
+
+## What Lotus checks
+
+Before showing a pair route as executable, Lotus checks:
+
+- Both venues map to the same canonical market and outcome.
+- Both legs have fresh live quotes.
+- Both legs have enough depth for the intended size.
+- Rule compatibility is safe.
+- Funding or sellable position is ready.
+- Any required signer or venue setup is ready.
+- The final blended result improves the route.
+
+If one leg fails these checks, Lotus should not force the pair route.
+
+## Common mistakes
+
+- Do not assume two venues are always better. Pair routes only help when the math improves.
+- Do not compare only the top visible price. Depth matters more for larger orders.
+- Do not treat display prices as execution authority. Execution still needs a fresh quote.
+
+<Note>
+  A pair route is selected for execution quality, not for visual venue count.
+</Note>

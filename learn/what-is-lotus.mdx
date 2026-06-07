@@ -3,18 +3,72 @@ title: "What is Lotus?"
 description: "Lotus is the execution and intelligence layer above prediction market venues."
 ---
 
-Lotus is a prediction market execution and intelligence layer.
+Lotus is an execution layer for prediction markets.
 
-Instead of forcing users to compare liquidity across multiple venues, Lotus:
-
-- **Discovers** markets across supported venues
-- **Normalizes** equivalent markets into one canonical market
-- **Evaluates** whether a route is safely executable
-- **Finds** the best executable route
-- **Executes** across supported venues
+It gives users one clean trading surface while the backend handles the harder work underneath: market discovery, venue matching, live pricing, route selection, signatures, execution, settlement checks, and position accounting.
 
 <Note>
-  Lotus is **not** a prediction market venue. Lotus is the execution layer **above** prediction market venues.
+  Lotus is not a prediction market venue. Lotus sits above venues and helps users trade across them.
 </Note>
 
-Lotus thinks like a smart order router built for resolution-bound markets: every routing decision is bound by rule compatibility, shared outcome coverage, and fail-closed safety.
+## The simple version
+
+A trader should not need to know which venue has the best orderbook, which venue requires a wallet setup step, or whether two markets have slightly different resolution rules.
+
+Lotus turns that into a simpler flow:
+
+1. Pick a market and outcome.
+2. Enter an amount.
+3. Place the order.
+4. Sign if the selected route requires it.
+5. Let Lotus submit, track, and reconcile the execution.
+
+The user sees a single market. Lotus decides whether the best safe route is a single venue, a pair route, a tri route, or an RFQ-backed route.
+
+## What Lotus does
+
+Lotus has five core jobs.
+
+### Discover markets
+
+Lotus reads market metadata, orderbooks, prices, rules, and venue state from supported prediction market venues.
+
+### Normalize markets
+
+Lotus groups compatible venue markets into one canonical market when they share the same outcome, timing, resolution source, and rule basis.
+
+### Price the route
+
+Lotus compares live venue prices, available depth, fees, slippage, and route shape. Display prices can help users understand a market, but execution requires fresh validation.
+
+### Execute safely
+
+Lotus only submits a route when the required checks pass. If the route is not safe, Lotus fails closed instead of forcing an uncertain execution.
+
+### Reconcile the result
+
+After submission, Lotus tracks fill status, settlement status, trade history, positions, and venue-ready balances.
+
+## Why prediction market routing is different
+
+Normal trading routes mostly compare price and liquidity.
+
+Prediction market routing must also compare rules. Two venues can list markets that look similar but resolve differently. Routing between them without checking the shared outcome core can create bad fills.
+
+Lotus treats rule compatibility, resolution source, outcome mapping, venue readiness, and execution authority as first-class parts of routing.
+
+## Who Lotus serves
+
+Lotus is useful for:
+
+- Retail traders who want better execution without juggling venues.
+- Professional traders who care about route quality, depth, and settlement confidence.
+- Market makers who want structured RFQ flow.
+- Wallets and applications that want to embed prediction market execution.
+- Infrastructure teams that need canonical market, routing, and execution tooling.
+
+## The core principle
+
+Lotus can make the frontend feel simple because the backend owns the complexity.
+
+The frontend can show a clean market, live prices, and a single **Place order** action. The backend still enforces strict routeability, fresh quote checks, venue readiness, signatures, idempotency, and settlement verification.

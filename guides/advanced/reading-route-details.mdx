@@ -1,5 +1,62 @@
 ---
-title: "Reading Route Details"
+title: "Reading route details"
+description: "How to audit why Lotus selected a route."
 ---
 
-Route details expose every input the routing engine used: venue quotes, RFQ responses, depth, routeability checks, and the selection score. Use it to audit and reproduce Lotus decisions.
+Route details explain how Lotus chose an execution path.
+
+They are useful for builders, support teams, and advanced traders who want to inspect the route instead of only seeing the simplified preview.
+
+![Routing decision flow](/images/learn/routing-decision-flow.svg)
+
+## What route details include
+
+A route detail view can include:
+
+- Canonical market and outcome.
+- Side and amount.
+- Venue preference.
+- Eligible venues.
+- Selected route type.
+- Per-venue price and depth.
+- Expected average price.
+- Fees and estimated slippage.
+- Savings versus the reference route.
+- Readiness and blocker summaries.
+
+Execution still requires fresh checks at place time.
+
+## How to read venue legs
+
+Each leg should show:
+
+- Venue name.
+- Venue market ID.
+- Venue outcome ID or token ID.
+- Side.
+- Size.
+- Expected price.
+- Readiness status.
+
+For sells, the executable token ID matters. If Lotus cannot derive the sell token ID, the route should not be executable.
+
+## Route type
+
+The route type tells you how many venues are used:
+
+- `SINGLE`: one venue.
+- `PAIR`: two venues.
+- `TRI`: three venues.
+
+More venues are not automatically better. The selected route should beat the simpler routes after fees, slippage, and risk.
+
+## Common mistakes
+
+- Do not use route details as proof that execution already happened.
+- Do not assume an old route is still executable.
+- Do not ignore missing venue outcome IDs.
+- Do not compare routes without accounting for fees and depth.
+
+<Note>
+  Route details are audit data. They explain the decision, but submit still needs live execution gates.
+</Note>

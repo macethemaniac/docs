@@ -1,5 +1,50 @@
 ---
-title: "Understanding Builder Fees"
+title: "Understanding builder fees"
+description: "How builder fees fit into route pricing."
 ---
 
-Builder fees are the protocol fee Lotus charges on executed routes. They are deducted from surplus before user distribution and shown on every route preview.
+Builder fees are fees charged by an application or integration that routes users through Lotus.
+
+They must be included in the preview so the user can understand the final expected output.
+
+## Where builder fees apply
+
+Builder fees can apply to:
+
+- A successful execution.
+- A route that produces price improvement.
+- A configured integration or partner account.
+- A specific fee policy agreed with the builder.
+
+Lotus should not surprise users with hidden fees after execution.
+
+## How fees affect routing
+
+Fees change the route comparison.
+
+A route that looks best before fees may not be best after fees. Lotus should compare routes net of applicable fees so the selected path reflects what the user actually receives.
+
+## What users should see
+
+The preview and receipt should make fee impact clear.
+
+Useful fields include:
+
+- Gross expected output.
+- Fee amount.
+- Net expected output.
+- Savings after fees.
+- Final realized fee after settlement.
+
+For simple retail views, Lotus can summarize this. Advanced views should expose the full calculation.
+
+## Common mistakes
+
+- Do not calculate savings before fees and display it as final.
+- Do not apply a builder fee to a failed order unless the policy explicitly allows it.
+- Do not hide builder fee impact from the receipt.
+- Do not let fees turn a route into a worse execution than the baseline.
+
+<Note>
+  Builder fees are sustainable only when the user still receives a clear execution benefit.
+</Note>

@@ -1,6 +1,45 @@
 ---
-title: "Fail Closed"
+title: "Fail closed"
 description: "Safety over forced execution."
 ---
 
-Lotus **fails closed**: when execution cannot be done safely, Lotus does not execute. Forced execution under uncertainty leaks value; failing closed preserves user funds and protocol invariants. The cost is occasional non-execution; the benefit is a system that is safe by default.
+Lotus fails closed when execution cannot be done safely.
+
+That means Lotus refuses to submit rather than guessing through uncertainty. The user may need to refresh, enable a venue, sign, or wait for readiness, but Lotus does not force a trade through an unsafe path.
+
+## Common fail-closed cases
+
+Lotus can fail closed when:
+
+- A quote expired before execution.
+- A venue orderbook moved outside tolerance.
+- A required venue token ID is missing.
+- A user does not have enough venue-ready balance.
+- A sell route cannot verify the user's position.
+- A required signature is missing or invalid.
+- A venue account setup step is incomplete.
+- A route is outside approved execution lanes.
+- Settlement verification cannot confirm the expected result.
+
+## Why this matters
+
+Prediction market mistakes are not only price mistakes. They can be rule mistakes, outcome mapping mistakes, venue readiness mistakes, or settlement mistakes.
+
+Failing closed protects users from bad fills and protects Lotus from creating positions that cannot be reconciled safely.
+
+## What users should see
+
+The normal UI should stay simple:
+
+- **Place order** when the route is ready.
+- **Sign** when a signature is required.
+- **Enable venue** when setup is needed.
+- A clear failure message when the user can take action.
+
+Debug blockers belong in admin or staging views. Production users should see the next useful action, not backend internals.
+
+## Fail closed is not stale UI
+
+Lotus can show live display prices while still refusing execution. That is intentional.
+
+Display paths are optimized for speed. Execution paths are optimized for correctness.

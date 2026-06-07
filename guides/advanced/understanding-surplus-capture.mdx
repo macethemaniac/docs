@@ -1,5 +1,55 @@
 ---
-title: "Understanding Surplus Capture"
+title: "Understanding surplus capture"
+description: "How Lotus accounts for improvement beyond the baseline route."
 ---
 
-Surplus is the price improvement Lotus produces vs. a reference baseline. Surplus capture is the policy that decides how much surplus accrues to the user, LP, and protocol.
+Surplus is the improvement produced by a Lotus route compared with a reference baseline.
+
+For a trader, surplus is the extra value created by better routing. For builders and liquidity partners, surplus is also the source of transparent fee and revenue policies.
+
+## What creates surplus
+
+Surplus can come from:
+
+- Better venue depth.
+- Multi-venue splitting.
+- RFQ liquidity.
+- Lower slippage.
+- Better price discovery.
+- Faster execution against fresh quotes.
+
+The surplus calculation should be net of relevant fees.
+
+## Baseline route
+
+Lotus needs a baseline to measure improvement.
+
+The baseline is usually the best safe single-venue route available for the same market, outcome, side, and amount at preview time.
+
+If no reliable baseline exists, Lotus should avoid presenting a fake savings number.
+
+## Estimated versus final surplus
+
+Estimated surplus appears at preview time.
+
+Final surplus is calculated after:
+
+- Venue submit.
+- Fill confirmation.
+- Settlement verification.
+- Fee accounting.
+- Any fallback route handling.
+
+These numbers can differ because markets move.
+
+## Common mistakes
+
+- Do not calculate surplus against a stale route.
+- Do not count unreachable liquidity.
+- Do not ignore builder fees.
+- Do not show estimated surplus as final settlement.
+- Do not reward a route that worsens the user's net outcome.
+
+<Note>
+  Surplus capture should align the protocol, builders, and users around better execution.
+</Note>

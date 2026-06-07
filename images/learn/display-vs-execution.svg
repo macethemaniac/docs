@@ -1,0 +1,19 @@
+<svg width="1200" height="430" viewBox="0 0 1200 430" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="430" rx="24" fill="#111216"/>
+  <text x="60" y="70" fill="#FFFFFF" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="700">Display data vs. execution authority</text>
+  <text x="60" y="102" fill="#A7ADBB" font-family="Inter, Arial, sans-serif" font-size="16">Fast UI can use snapshots. Trades require fresh validation.</text>
+  <g font-family="Inter, Arial, sans-serif">
+    <rect x="80" y="150" width="470" height="200" rx="16" fill="#20232B" stroke="#3A3E4C"/>
+    <text x="116" y="194" fill="#FFFFFF" font-size="22" font-weight="700">Display path</text>
+    <text x="116" y="232" fill="#A7ADBB" font-size="15">Market cards, charts, orderbooks</text>
+    <text x="116" y="260" fill="#A7ADBB" font-size="15">Use live snapshots and cached reads</text>
+    <text x="116" y="288" fill="#A7ADBB" font-size="15">Can show a quiet placeholder if missing</text>
+    <text x="116" y="316" fill="#CCFF00" font-size="15" font-weight="700">Not execution authority</text>
+    <rect x="650" y="150" width="470" height="200" rx="16" fill="#0F251B" stroke="#1E8F5A"/>
+    <text x="686" y="194" fill="#FFFFFF" font-size="22" font-weight="700">Execution path</text>
+    <text x="686" y="232" fill="#DDFEE7" font-size="15">Fresh quote and readiness</text>
+    <text x="686" y="260" fill="#DDFEE7" font-size="15">Valid token IDs and balances</text>
+    <text x="686" y="288" fill="#DDFEE7" font-size="15">Signer and route checks</text>
+    <text x="686" y="316" fill="#CCFF00" font-size="15" font-weight="700">Allowed to submit only if safe</text>
+  </g>
+</svg>

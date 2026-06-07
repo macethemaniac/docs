@@ -1,0 +1,60 @@
+<svg width="1200" height="420" viewBox="0 0 1200 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="420" rx="24" fill="#111216"/>
+  <rect x="32" y="32" width="1136" height="356" rx="18" fill="#17191F" stroke="#2B2E38"/>
+  <text x="64" y="80" fill="#FFFFFF" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="700">Lotus order flow</text>
+  <text x="64" y="112" fill="#A7ADBB" font-family="Inter, Arial, sans-serif" font-size="16">One user action, backend-owned route validation, submit, and reconciliation.</text>
+  <g font-family="Inter, Arial, sans-serif">
+    <g transform="translate(70 170)">
+      <rect width="145" height="96" rx="12" fill="#20232B" stroke="#3A3E4C"/>
+      <text x="18" y="34" fill="#CCFF00" font-size="16" font-weight="700">1. Intent</text>
+      <text x="18" y="62" fill="#FFFFFF" font-size="14">Market, side,</text>
+      <text x="18" y="82" fill="#FFFFFF" font-size="14">amount</text>
+    </g>
+    <g transform="translate(250 170)">
+      <rect width="145" height="96" rx="12" fill="#20232B" stroke="#3A3E4C"/>
+      <text x="18" y="34" fill="#CCFF00" font-size="16" font-weight="700">2. Preview</text>
+      <text x="18" y="62" fill="#FFFFFF" font-size="14">Fresh quote and</text>
+      <text x="18" y="82" fill="#FFFFFF" font-size="14">readiness</text>
+    </g>
+    <g transform="translate(430 170)">
+      <rect width="145" height="96" rx="12" fill="#20232B" stroke="#3A3E4C"/>
+      <text x="18" y="34" fill="#CCFF00" font-size="16" font-weight="700">3. Route</text>
+      <text x="18" y="62" fill="#FFFFFF" font-size="14">Single, pair, tri,</text>
+      <text x="18" y="82" fill="#FFFFFF" font-size="14">or RFQ</text>
+    </g>
+    <g transform="translate(610 170)">
+      <rect width="145" height="96" rx="12" fill="#20232B" stroke="#3A3E4C"/>
+      <text x="18" y="34" fill="#CCFF00" font-size="16" font-weight="700">4. Sign</text>
+      <text x="18" y="62" fill="#FFFFFF" font-size="14">Only if venue</text>
+      <text x="18" y="82" fill="#FFFFFF" font-size="14">requires it</text>
+    </g>
+    <g transform="translate(790 170)">
+      <rect width="145" height="96" rx="12" fill="#20232B" stroke="#3A3E4C"/>
+      <text x="18" y="34" fill="#CCFF00" font-size="16" font-weight="700">5. Submit</text>
+      <text x="18" y="62" fill="#FFFFFF" font-size="14">Backend sends</text>
+      <text x="18" y="82" fill="#FFFFFF" font-size="14">venue orders</text>
+    </g>
+    <g transform="translate(970 170)">
+      <rect width="145" height="96" rx="12" fill="#20232B" stroke="#3A3E4C"/>
+      <text x="18" y="34" fill="#CCFF00" font-size="16" font-weight="700">6. Verify</text>
+      <text x="18" y="62" fill="#FFFFFF" font-size="14">Fills, positions,</text>
+      <text x="18" y="82" fill="#FFFFFF" font-size="14">settlement</text>
+    </g>
+  </g>
+  <g stroke="#CCFF00" stroke-width="3" stroke-linecap="round">
+    <path d="M220 218H245"/>
+    <path d="M400 218H425"/>
+    <path d="M580 218H605"/>
+    <path d="M760 218H785"/>
+    <path d="M940 218H965"/>
+  </g>
+  <g fill="#CCFF00">
+    <path d="M245 218L236 213V223L245 218Z"/>
+    <path d="M425 218L416 213V223L425 218Z"/>
+    <path d="M605 218L596 213V223L605 218Z"/>
+    <path d="M785 218L776 213V223L785 218Z"/>
+    <path d="M965 218L956 213V223L965 218Z"/>
+  </g>
+  <rect x="64" y="310" width="1072" height="44" rx="10" fill="#0F251B" stroke="#1E8F5A"/>
+  <text x="84" y="338" fill="#DDFEE7" font-family="Inter, Arial, sans-serif" font-size="15">Safety rule: display prices can inform the UI, but execution always requires fresh backend quote and readiness checks.</text>
+</svg>
