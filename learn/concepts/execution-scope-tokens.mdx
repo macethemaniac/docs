@@ -3,4 +3,48 @@ title: "Execution scope tokens"
 description: "Authorize exact execution lanes."
 ---
 
-An **execution scope token (EST)** binds a specific execution to a route, size, price band, and time window. ESTs are single-use, time-limited, and bound to one route — closing the gap between quote and execution.
+An execution scope token, or EST, binds execution authority to a specific route.
+
+It is designed to close the gap between quote and execution. A user should not sign a broad permission that lets the backend choose any route later. The signed authorization should match the route, amount, side, price band, venue set, and time window the user saw.
+
+## What an EST protects
+
+An EST can bind:
+
+- The user.
+- The canonical market and outcome.
+- The side and amount.
+- The selected route.
+- The venue set.
+- The price or slippage band.
+- The expiry time.
+- The execution lane or scope.
+
+This makes the order narrow. If the route changes, expires, or becomes unsafe, Lotus must produce a new valid path instead of reusing the old authority.
+
+## Why single-use matters
+
+Execution tokens are single-use because retrying the same authority can create replay risk.
+
+If a request is resent, refreshed, or double-clicked, Lotus should return the existing order state instead of creating a duplicate submit. Idempotency and single-use authority work together: one user intent should produce at most one venue submit for the same bound order.
+
+## EST vs. signature
+
+A user signature approves a required payload. An EST defines what the backend is allowed to do with that approval.
+
+For example, a venue may require a user-signed order. Lotus can prepare the signature request, the user signs it, and the backend submits automatically. The user should not need a second Place action after signing.
+
+## When an EST should fail
+
+An EST should fail if:
+
+- The route expired.
+- The quote moved outside tolerance.
+- The venue set changed.
+- A required signer or venue account is not ready.
+- The order was already submitted.
+- The route is outside the approved lane.
+
+<Note>
+  ESTs are execution safety tools. They are not a replacement for fresh routeability checks.
+</Note>

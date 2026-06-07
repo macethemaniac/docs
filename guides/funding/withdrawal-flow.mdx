@@ -3,4 +3,53 @@ title: "Withdrawal flow"
 description: "How Lotus returns available funds safely."
 ---
 
-Withdrawals return available balances to your wallet. Funds locked behind in-flight executions are released after settlement verification.
+Withdrawals move available funds out of Lotus and back to the user's wallet.
+
+Lotus should only withdraw funds that are not reserved for pending execution, settlement, or venue recovery.
+
+## What can be withdrawn
+
+Funds can usually be withdrawn when they are:
+
+- Credited.
+- Not locked by an open order.
+- Not needed for settlement verification.
+- Not reserved for an in-flight withdrawal.
+- Available on the selected chain or venue path.
+
+If funds are still propagating through a venue activation or order settlement, Lotus should wait.
+
+## What users see
+
+The withdrawal flow should show:
+
+- Available amount.
+- Destination wallet.
+- Chain or rail.
+- Estimated status.
+- Final confirmation.
+
+Users should not see internal relay or venue messages unless they need to take action.
+
+## Why withdrawals can be blocked
+
+Withdrawals can be blocked when:
+
+- Funds are reserved for a pending order.
+- Settlement verification is incomplete.
+- The destination is invalid.
+- A venue balance refresh is still pending.
+- The withdrawal rail is not configured.
+
+The UI should explain the concrete reason when the user can fix it.
+
+## Common mistakes
+
+- Do not withdraw from funds reserved for a live order.
+- Do not assume a venue balance is withdrawable before reconciliation.
+- Do not retry failed withdrawals without checking the failure reason.
+- Do not expose raw provider errors in production copy.
+
+<Warning>
+  Withdrawal safety depends on correct accounting. Lotus should fail closed if balances are ambiguous.
+</Warning>

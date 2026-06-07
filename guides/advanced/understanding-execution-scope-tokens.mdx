@@ -3,4 +3,56 @@ title: "Understanding execution scope tokens"
 description: "How ESTs bind user approval to a narrow execution path."
 ---
 
-ESTs collapse the gap between quote and execution. A user signature authorizes exactly the route shown — not a class of routes. See [Execution Scope Tokens](/learn/concepts/execution-scope-tokens) for the conceptual model.
+An execution scope token, or EST, limits what Lotus can do after a user approves an order.
+
+It makes the approval narrow: one user intent, one route scope, one allowed execution window.
+
+![Lotus order flow](/images/learn/lotus-order-flow.svg)
+
+## What an EST binds
+
+An EST can bind:
+
+- User.
+- Market.
+- Outcome.
+- Side.
+- Amount.
+- Route type.
+- Venue set.
+- Price or slippage band.
+- Expiry.
+- Order policy.
+- Single-use submit authority.
+
+If these inputs change, Lotus should prepare a new scope.
+
+## EST and signatures
+
+Some venues require the user to sign an order payload.
+
+The user should still experience this as one Place flow:
+
+1. Click **Place order**.
+2. Approve the required signature.
+3. Lotus submits automatically.
+4. Status updates to submitted or filled.
+
+The signature approves the venue payload. The EST defines what backend execution is allowed to do with it.
+
+## Why single-use matters
+
+Single-use scope prevents replay.
+
+If a user double-clicks, refreshes, or retries while an order is pending, Lotus should return the current order state instead of creating another venue submit.
+
+## Common mistakes
+
+- Do not reuse an EST after quote expiry.
+- Do not use one EST for a different venue set.
+- Do not treat signature approval as permission for arbitrary rerouting.
+- Do not allow duplicate signature posts to resubmit the same order.
+
+<Warning>
+  ESTs are not optional decoration. They are part of the execution security model.
+</Warning>

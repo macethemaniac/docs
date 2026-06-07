@@ -3,4 +3,46 @@ title: "Funding status"
 description: "How to read deposits, activations, and venue-ready balances."
 ---
 
-A funding intent moves through `pending`, `credited`, and `failed` states. Status updates are available via the API, WebSocket, and webhook.
+Funding status explains where your money is in the funding lifecycle.
+
+The key distinction is available balance versus venue-ready balance. Available balance is cash Lotus can see. Venue-ready balance is cash that can be used by a specific venue route.
+
+## Common statuses
+
+You may see:
+
+- `pending`: Lotus has recorded the request but confirmation is not complete.
+- `credited`: Funds are available in the Lotus account view.
+- `activating`: Lotus is enabling a venue-specific readiness step.
+- `ready`: The venue can use the balance for execution.
+- `failed`: The funding or activation step did not complete.
+- `withdrawn`: Funds were returned to the destination wallet.
+
+The exact label can vary by surface, but the meaning should stay clear.
+
+## Why activation can take time
+
+Some venues need an approval, account setup, or relay confirmation before funds are usable.
+
+Lotus should poll the venue and update the status when readiness is confirmed. The user should not need to manually refresh many times.
+
+## What to check first
+
+If a venue is not ready, check:
+
+- Whether the deposit settled.
+- Whether activation was submitted.
+- Whether the venue needs an allowance or account setup.
+- Whether the venue balance was refreshed after activation.
+- Whether the route uses a different venue than expected.
+
+## Common mistakes
+
+- Do not confuse funding wallet balance with venue-ready balance.
+- Do not assume activation failed because it is still pending.
+- Do not retry activation repeatedly while Lotus is polling.
+- Do not withdraw funds that are reserved for in-flight execution.
+
+<Note>
+  A ready venue balance means that venue can be considered for routing. It does not guarantee a specific market quote.
+</Note>

@@ -3,4 +3,72 @@ title: "Smart routing"
 description: "How Lotus chooses execution paths."
 ---
 
-**Smart routing** scores candidate routes by price after fees, expected slippage, fill probability, and risk state. The dominating route is bound to an Execution Scope Token and handed to the execution layer.
+Smart routing is how Lotus chooses the best safe execution path for a user intent.
+
+The router compares venue books, RFQ liquidity, fees, slippage, fill probability, and route risk. It only selects routes that pass routeability checks.
+
+## Candidate routes
+
+Lotus can consider several route shapes.
+
+### Single-venue route
+
+The full order executes on one venue. This is simplest and often best for small trades or when one venue clearly has the best executable liquidity.
+
+### Pair route
+
+The order splits across two venues. A pair route can improve price or reduce slippage when one venue alone does not have enough depth.
+
+### Tri route
+
+The order splits across three venues. A tri route is only useful when the additional venue improves the result after fees, slippage, and risk.
+
+### RFQ-backed route
+
+An eligible market maker can submit a quote that competes with venue orderbooks. Lotus can use an RFQ quote when it improves the route and satisfies the same safety rules.
+
+## What the router scores
+
+The router scores candidate routes using:
+
+- Effective price after fees.
+- Expected slippage.
+- Available size.
+- Fill probability.
+- Venue readiness.
+- Route complexity.
+- Rule compatibility.
+- Settlement confidence.
+- User order policy.
+- User slippage tolerance.
+
+The best route is not always the route with the lowest visible price. It is the best executable route after all costs and risks.
+
+## When pair or tri routes matter
+
+For small trades, a single venue can be enough.
+
+For larger trades, splitting can matter because one venue may not have enough depth at the displayed price. A pair or tri route becomes attractive when the math proves the user receives a better result after fees and slippage.
+
+Lotus should not add venues just to make a route look sophisticated. It should add venues only when they improve execution quality.
+
+## Venue preference
+
+Users and builders can request a venue preference.
+
+- `BEST_ROUTE` lets Lotus choose the best safe route.
+- A venue-specific preference stays on that venue or returns unavailable.
+
+Venue-specific preferences should not silently smart-route away from the requested venue.
+
+## Execution binding
+
+After the router selects a route, execution still needs fresh validation.
+
+The backend binds the order to the selected route, amount, side, order policy, slippage tolerance, and time window. If the route expires or becomes unsafe before submit, Lotus returns a blocked or expired state instead of forcing execution.
+
+## Builder takeaway
+
+Use smart routing when you want Lotus to optimize execution.
+
+Use venue-specific routing only when your product explicitly needs a venue-bound order.

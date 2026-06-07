@@ -3,4 +3,43 @@ title: "Pair routes"
 description: "Two-venue execution routes."
 ---
 
-A **pair route** executes a single intent across two venues, producing a better blended price than either venue alone could provide.
+A pair route splits one trade across two venues.
+
+Lotus uses a pair route when the blended result is better than the best safe single-venue route after fees, slippage, and execution risk.
+
+![Routing decision flow](/images/learn/routing-decision-flow.svg)
+
+## Why pair routes help
+
+One venue may show the best top-of-book price, but not enough depth for the user's full size. If the order only uses that venue, the later shares may fill at worse levels.
+
+A second venue can provide better depth or a better price for part of the order. The combined route can reduce slippage and improve the user's expected output.
+
+## What Lotus compares
+
+For a pair route, Lotus compares:
+
+- The best single-venue route.
+- Each eligible two-venue split.
+- Fees on each leg.
+- Depth and fill probability.
+- Venue readiness.
+- Rule compatibility.
+- Settlement confidence.
+
+The pair route wins only if it improves the executable outcome.
+
+## What users should understand
+
+The user places one order. Lotus may execute it as two legs.
+
+The receipt should show where each leg went, how much filled on each venue, and whether the final result beat the reference single-venue baseline.
+
+## When Lotus should not use a pair route
+
+Lotus should not use a pair route if:
+
+- One venue already gives the best safe result.
+- The added venue does not improve the math.
+- Either leg is not routeable.
+- The route adds complexity without user benefit.

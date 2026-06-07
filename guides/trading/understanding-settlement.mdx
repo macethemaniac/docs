@@ -3,4 +3,51 @@ title: "Understanding settlement"
 description: "How Lotus verifies fills after execution."
 ---
 
-Lotus verifies that each leg settled as expected before accounting proceeds. Verified executions appear in positions and contribute to surplus accounting.
+Settlement is the process of confirming that the trade result matches what Lotus submitted and what the venue reports.
+
+An order is not fully accounted for just because it was submitted.
+
+![Lotus order flow](/images/learn/lotus-order-flow.svg)
+
+## What Lotus verifies
+
+After execution, Lotus checks:
+
+- Venue order ID.
+- Filled size.
+- Fill price.
+- Order status.
+- Venue position update.
+- Wallet or balance movement.
+- Route leg completion.
+- Whether the final result matches the receipt.
+
+For multi-leg routes, Lotus verifies every leg.
+
+## Why this matters
+
+Venue fills can arrive after the first submit response.
+
+Without settlement verification, a user may see a pending order even though the venue filled it, or a filled order without the right position accounting. Lotus reconciles the venue result into trade history, settlement state, portfolio positions, and balances.
+
+## What users should see
+
+The UI should move toward one clear result:
+
+- **Submitting** while Lotus is sending the order.
+- **Submitted** while Lotus waits for venue confirmation.
+- **Filled** after the venue fill is verified.
+- **Failed** when the route cannot complete.
+
+If recovery is needed, the user should see the concrete next step.
+
+## Common mistakes
+
+- Do not treat submit response as final accounting.
+- Do not mark a fill without verifying the venue result.
+- Do not leave real venue fills stuck as pending in the app.
+- Do not combine settlement data from incompatible venue markets.
+
+<Note>
+  Settlement verification protects the account view from ghost fills and missing positions.
+</Note>

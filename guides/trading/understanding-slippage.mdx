@@ -3,4 +3,52 @@ title: "Understanding slippage"
 description: "How Lotus handles price movement between preview and fill."
 ---
 
-Slippage is the gap between the quoted price and the realized average fill price. Lotus estimates slippage from live book state and any RFQ commitments and binds it to the EST's price band.
+Slippage is the difference between the price you preview and the price you actually receive.
+
+Lotus estimates slippage from live venue depth, RFQ commitments, fees, and the route shape. Execution is allowed only inside the approved tolerance.
+
+## What causes slippage
+
+Slippage can happen when:
+
+- The venue orderbook moves before execution.
+- The order size consumes multiple price levels.
+- A multi-leg route fills unevenly.
+- A venue rejects stale order parameters.
+- A quote expires before the user signs.
+
+The user should not need to understand every venue detail. Lotus should show a clear route preview and enforce the safety band in the backend.
+
+## How tolerance works
+
+Slippage tolerance is usually expressed in basis points.
+
+For example:
+
+- `50` bps means `0.50%`.
+- `100` bps means `1.00%`.
+- `250` bps means `2.50%`.
+
+Higher tolerance can make fills more likely in fast markets, but it also allows worse execution. Lower tolerance protects price, but may reject more orders.
+
+## How Lotus uses it
+
+Lotus binds the tolerance to the order policy and execution scope.
+
+That means:
+
+- Preview calculates the route with the selected tolerance.
+- Place revalidates that the quote is still fresh.
+- Signatures authorize the same route scope.
+- Submit fails closed if the venue price moves outside the band.
+
+## Common mistakes
+
+- Do not use stale display prices for execution.
+- Do not make tolerance unlimited to force fills.
+- Do not hide meaningful price movement from users.
+- Do not reuse an old signed payload after the route changes.
+
+<Note>
+  Slippage tolerance improves fill reliability, but it is not permission for arbitrary repricing.
+</Note>

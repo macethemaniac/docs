@@ -3,4 +3,45 @@ title: "Tri routes"
 description: "Three-venue execution routes."
 ---
 
-A **tri route** executes a single intent across three venues, unlocking liquidity that pair routes cannot reach. Lotus only selects a tri route when it strictly dominates available pair routes after fees and risk.
+A tri route splits one trade across three venues.
+
+Tri routes can unlock deeper liquidity than single or pair routes, but they add coordination complexity. Lotus should only use them when the math clearly improves the user's executable result.
+
+![Routing decision flow](/images/learn/routing-decision-flow.svg)
+
+## When tri routes help
+
+Tri routes are most useful when:
+
+- A user trades a larger notional size.
+- No single venue has enough depth.
+- A pair route still leaves meaningful slippage.
+- A third venue improves the blended price after fees.
+- All three venues pass routeability checks.
+
+## Why tri routes are stricter
+
+More legs mean more things can fail.
+
+A tri route needs:
+
+- Three compatible venue legs.
+- Three fresh executable quotes.
+- Three valid venue/outcome mappings.
+- Enough user balance or sellable position per leg.
+- Supported signing and submit paths.
+- Settlement tracking for every leg.
+
+If any leg is unsafe, Lotus should not force the tri route.
+
+## Tri route vs. pair route
+
+Lotus should compare the tri route against the best pair route, not only against a single venue.
+
+The tri route wins only when it strictly improves the expected outcome after fees, slippage, and risk. If a pair route is almost as good with less complexity, the pair route may be better.
+
+## User-facing result
+
+Users should not need to manage three venues manually.
+
+They should see one route preview, one Place action, one signing flow if required, and one final execution receipt that explains each leg.

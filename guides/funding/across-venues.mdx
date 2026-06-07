@@ -3,4 +3,53 @@ title: "Funding across venues"
 description: "How Lotus keeps balances useful across routed venues."
 ---
 
-Lotus rebalances funded capacity across venues as routing demand shifts. Users see one balance; Lotus manages venue allocation.
+Lotus routes across multiple venues, so funding must be checked per venue.
+
+A user may see one account experience, but execution still depends on each venue's readiness rules.
+
+![Funding readiness flow](/images/learn/funding-readiness-flow.svg)
+
+## Why venues differ
+
+Each venue can require different setup.
+
+Examples include:
+
+- Wallet funding.
+- Venue account creation.
+- Spending approval.
+- Partner sub-account readiness.
+- Venue-specific balance refresh.
+- Sellable position verification.
+
+Lotus abstracts this from the normal trading flow, but the backend still checks every leg.
+
+## How Lotus uses venue balances
+
+For single-venue routes, Lotus checks only the selected venue.
+
+For pair and tri routes, Lotus checks every venue leg. A route with two ready venues and one blocked venue cannot be submitted as a tri route.
+
+Lotus can still choose a safer single or pair route if that gives the best executable result.
+
+## What users should see
+
+Users should see:
+
+- Which venues are ready.
+- Which venues need activation.
+- Total available value.
+- Any pending setup status.
+
+They should not need to choose a manual funding allocation for every trade.
+
+## Common mistakes
+
+- Do not route to a venue that has display liquidity but no venue-ready balance.
+- Do not mark a route as blocked when a simpler ready route exists.
+- Do not show every venue failure as a user problem.
+- Do not mix staging diagnostics into production cards.
+
+<Note>
+  Cross-venue funding is useful only when it stays synchronized with routing readiness.
+</Note>

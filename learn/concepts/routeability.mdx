@@ -3,12 +3,59 @@ title: "Routeability"
 description: "Whether a route can be safely executed."
 ---
 
-**Routeability** is the determination that a candidate route can be safely executed. A route is routeable when:
+Routeability is Lotus's decision that a candidate route can be safely executed.
 
-1. All legs share an outcome core.
-2. All venues are live and quoting.
-3. Rule compatibility holds for the targeted outcome.
-4. Replay and scope protections are satisfiable.
-5. User slippage and risk preferences can be honored.
+It is stricter than showing a price.
 
-If any check fails, the route is non-routeable.
+## Display price vs. routeability
+
+Lotus may show a live display price when at least one trusted venue has a recent usable price.
+
+That does not mean the route is executable.
+
+Execution requires a fresh quote and a full set of safety checks. A market can have a visible price while still being blocked from execution because a venue account is not ready, an outcome token is missing, a rule match is incomplete, or a quote expired.
+
+## Routeability checks
+
+A route is routeable only when the required checks pass:
+
+1. The route stays inside the shared outcome core.
+2. The venue rules are compatible for the selected outcome.
+3. The route has fresh executable quotes.
+4. Venue market IDs and outcome IDs are present.
+5. The user has sufficient verified venue-ready balance or sellable position.
+6. The signing model is supported.
+7. The venue adapter can submit that route type.
+8. Slippage and order policy can be honored.
+9. The route is inside approved execution lanes.
+10. Replay and idempotency protections are available.
+
+If any required check fails, the route is non-routeable.
+
+## Route states
+
+Lotus separates route states so the user interface can stay clean while the backend stays strict.
+
+- `READY_TO_PLACE`: the order can move forward.
+- `NEEDS_SIGNATURE`: the user must approve a signature before backend submit.
+- `NEEDS_VENUE_SETUP`: the user must enable or link a venue.
+- `WAITING_FOR_VENUE_READY`: Lotus is waiting for backend or venue propagation.
+- `BLOCKED_ACTION_REQUIRED`: the user has a concrete action to take.
+- `EXPIRED`: the quote expired and should be renewed.
+- `FAILED`: execution failed closed.
+
+## Why Lotus fails closed
+
+Failing closed means Lotus does not submit when safety is uncertain.
+
+That can feel stricter than a normal venue UI, but it protects users from bad fills, stale routes, mismatched outcomes, and settlement drift.
+
+<Warning>
+  Lotus should never use stale display data as execution authority. Execution must be based on fresh quote and readiness validation.
+</Warning>
+
+## What builders should expect
+
+Builders can use display endpoints for fast market UI, cards, charts, and orderbooks.
+
+Builders should use execution preview and order endpoints for trading. Those endpoints return canonical routeability state, required actions, blockers, signatures, and status updates.

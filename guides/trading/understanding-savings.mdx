@@ -3,4 +3,57 @@ title: "Understanding savings"
 description: "How Lotus calculates route improvement."
 ---
 
-Savings is the price improvement of the selected route vs. the best single-venue execution, net of fees. Lotus reports estimated savings at preview time and final savings after settlement verification.
+Savings is the improvement Lotus expects from the selected route compared with a reference route.
+
+The reference is usually the best safe single-venue route for the same market, outcome, side, and amount.
+
+## What savings includes
+
+Savings should account for:
+
+- Venue price.
+- Available depth.
+- Fees.
+- Expected slippage.
+- Route size.
+- Multi-leg split quality.
+- Any builder or protocol fee shown in the preview.
+
+Lotus should report estimated savings before execution and final savings after settlement verification.
+
+## Why savings can change
+
+Estimated savings can change because markets move.
+
+The final receipt may differ from the preview if:
+
+- A venue book moved before execution.
+- A fallback route was used.
+- One leg filled at a different level.
+- Fees changed the final output.
+- The order only partially filled under the selected policy.
+
+The receipt should make this clear.
+
+## What good savings looks like
+
+Good savings are not only a green number.
+
+A good route should be:
+
+- Better than the reference route.
+- Executable with fresh venue data.
+- Safe under the shared outcome core.
+- Supported by venue submit and settlement paths.
+- Clear enough for the user to audit later.
+
+## Common mistakes
+
+- Do not compare against a stale baseline.
+- Do not count theoretical depth that cannot be submitted.
+- Do not treat savings as final before settlement verification.
+- Do not choose a complex route for tiny or uncertain improvement.
+
+<Note>
+  Savings are useful only when the route is also executable and verifiable.
+</Note>
