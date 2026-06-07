@@ -20,6 +20,29 @@ Surplus can come from:
 
 The surplus calculation should be net of relevant fees.
 
+## The basic formula
+
+Lotus starts with a reference route and compares it with the executed route.
+
+For buys:
+
+```text
+Q_ref = notional / referenceAveragePrice
+Q_exec = filled shares from Lotus route
+surplusShares = max(0, Q_exec - Q_ref)
+grossSurplus = surplusShares * executedAveragePrice
+```
+
+For sells:
+
+```text
+referenceProceeds = shares * referenceAveragePrice
+executedProceeds = proceeds from Lotus route
+grossSurplus = max(0, executedProceeds - referenceProceeds)
+```
+
+The fee policy is applied only to positive `grossSurplus`.
+
 ## Baseline route
 
 Lotus needs a baseline to measure improvement.
@@ -41,6 +64,47 @@ Final surplus is calculated after:
 - Any fallback route handling.
 
 These numbers can differ because markets move.
+
+## How Lotus makes money
+
+Lotus can capture a configured share of positive surplus.
+
+```text
+protocolFee = min(
+  grossSurplus * protocolShareBps / 10000,
+  notional * maxProtocolFeeBpsOfNotional / 10000
+)
+```
+
+If a builder fee is configured, it follows the same pattern:
+
+```text
+builderFee = min(
+  grossSurplus * builderShareBps / 10000,
+  notional * maxBuilderFeeBpsOfNotional / 10000
+)
+```
+
+The user-retained improvement is:
+
+```text
+userSurplus = grossSurplus - protocolFee - builderFee
+```
+
+If `userSurplus` is not positive enough under the active policy, Lotus should not present the route as savings.
+
+## Receipt fields
+
+The final receipt should include:
+
+- Reference average price.
+- Executed average price.
+- Gross surplus.
+- Protocol fee.
+- Builder fee, if any.
+- User-retained surplus.
+- Fee policy version.
+- Settlement verification result.
 
 ## Common mistakes
 

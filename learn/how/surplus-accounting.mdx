@@ -1,6 +1,203 @@
 ---
-title: "Surplus Accounting"
-description: "How price improvement is measured and distributed."
+title: "Surplus accounting"
+description: "How Lotus measures price improvement and turns it into revenue."
 ---
 
-Surplus is the price improvement of Lotus execution vs. a reference single-venue baseline. Surplus accounting determines how that improvement is split between the user, LPs, and the protocol.
+Surplus is the extra value Lotus creates by executing better than a reference route.
+
+The reference route is usually the best safe single-venue route available at preview time for the same user intent: market, outcome, side, size, venue preference, order policy, and slippage tolerance.
+
+Lotus makes money by charging a transparent fee on positive improvement. If a route does not improve the user outcome, there should be no surplus fee.
+
+## The accounting flow
+
+1. Build the reference route.
+2. Build candidate single, pair, tri, and RFQ-backed routes.
+3. Score each route net of expected fees and slippage.
+4. Select the best safe route.
+5. Execute through the backend order flow.
+6. Recalculate realized improvement from verified fills.
+7. Apply the active fee policy.
+8. Write the receipt, user position, and revenue ledger entries.
+
+Estimated surplus appears at preview time. Final surplus is calculated only after settlement verification.
+
+## Core terms
+
+Use these variables:
+
+| Term | Meaning |
+| --- | --- |
+| `N` | User notional in USDC. |
+| `Q` | Shares being bought or sold. |
+| `P_ref` | Reference average price from the best safe baseline route. |
+| `P_exec` | Realized average execution price after route fills. |
+| `F_venue` | Venue fees paid by the route. |
+| `F_builder` | Builder fee, if configured. |
+| `F_protocol` | Lotus protocol fee. |
+| `S_gross` | Gross positive improvement before builder and protocol fees. |
+| `S_net_user` | Improvement retained by the user after fees. |
+
+For prediction markets, prices are usually quoted in cents or USDC per share. A price of `0.24` means 24 cents per share.
+
+## Buy surplus
+
+For a buy, the user starts with USDC and wants as many shares as possible.
+
+Reference shares:
+
+```text
+Q_ref = N / P_ref
+```
+
+Executed shares:
+
+```text
+Q_exec = sum(filled shares across all legs)
+```
+
+Share improvement:
+
+```text
+Delta_Q = max(0, Q_exec - Q_ref)
+```
+
+USDC-normalized gross surplus:
+
+```text
+S_gross = Delta_Q * P_exec
+```
+
+Lotus can also show the improvement as extra shares, which is often easier for traders to understand.
+
+## Sell surplus
+
+For a sell, the user starts with shares and wants as much USDC as possible.
+
+Reference proceeds:
+
+```text
+USDC_ref = Q * P_ref
+```
+
+Executed proceeds:
+
+```text
+USDC_exec = sum(leg proceeds after venue fills)
+```
+
+Gross surplus:
+
+```text
+S_gross = max(0, USDC_exec - USDC_ref)
+```
+
+Sell surplus is already denominated in USDC.
+
+## Fee policy
+
+The active fee policy is versioned. A policy can define:
+
+```text
+protocolShareBps
+builderShareBps
+maxProtocolFeeBpsOfNotional
+maxBuilderFeeBpsOfNotional
+minimumUserSurplusBps
+```
+
+Protocol fee:
+
+```text
+F_protocol = min(
+  S_gross * protocolShareBps / 10000,
+  N * maxProtocolFeeBpsOfNotional / 10000
+)
+```
+
+Builder fee:
+
+```text
+F_builder = min(
+  S_gross * builderShareBps / 10000,
+  N * maxBuilderFeeBpsOfNotional / 10000
+)
+```
+
+User-retained surplus:
+
+```text
+S_net_user = max(0, S_gross - F_protocol - F_builder)
+```
+
+The route should remain user-positive after fees:
+
+```text
+S_net_user >= N * minimumUserSurplusBps / 10000
+```
+
+If this condition fails, Lotus should choose a different route or show no savings.
+
+## Example buy
+
+A user buys `100 USDC` of a Yes outcome.
+
+The best safe single venue has an average price of `0.2500`.
+
+```text
+Q_ref = 100 / 0.2500 = 400 shares
+```
+
+Lotus finds a pair route with a realized average price of `0.2420`.
+
+```text
+Q_exec = 100 / 0.2420 = 413.2231 shares
+Delta_Q = 413.2231 - 400 = 13.2231 shares
+S_gross = 13.2231 * 0.2420 = 3.1999 USDC
+```
+
+If the protocol captures `20%` of surplus and the cap is not reached:
+
+```text
+F_protocol = 3.1999 * 0.20 = 0.6400 USDC
+S_net_user = 3.1999 - 0.6400 = 2.5599 USDC
+```
+
+The user still receives the better fill. Lotus earns only because the route improved the outcome.
+
+## Example sell
+
+A user sells `500 shares`.
+
+The best safe single venue bid averages `0.6100`.
+
+```text
+USDC_ref = 500 * 0.6100 = 305.00 USDC
+```
+
+Lotus finds a split route that realizes `0.6180`.
+
+```text
+USDC_exec = 500 * 0.6180 = 309.00 USDC
+S_gross = 309.00 - 305.00 = 4.00 USDC
+```
+
+After protocol and builder fees, the remaining improvement belongs to the user.
+
+## What the receipt should include
+
+The final receipt should include:
+
+- Reference route and `P_ref`.
+- Executed route and `P_exec`.
+- Filled size per leg.
+- Gross surplus.
+- Protocol fee.
+- Builder fee, if any.
+- User-retained surplus.
+- Fee policy version.
+- Settlement verification result.
+
+<Note>
+  Surplus accounting is measured from verified fills. Preview math is an estimate.
+</Note>

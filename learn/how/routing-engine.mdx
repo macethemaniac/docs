@@ -1,6 +1,106 @@
 ---
-title: "Routing Engine"
-description: "Score and select the dominating route."
+title: "Routing engine"
+description: "How Lotus scores and selects the best executable route."
 ---
 
-The routing engine scores candidate routes by price after fees, expected slippage, fill probability, and risk state. The dominating route is bound to an EST.
+The routing engine chooses the best safe route for a user intent.
+
+It compares venue orderbooks, RFQ quotes, fees, slippage, fill probability, and route risk. The selected route is then bound to the execution scope.
+
+![Routing decision flow](/images/learn/routing-decision-flow.svg)
+
+## Candidate generation
+
+For each user intent, Lotus can generate:
+
+- Single-venue routes.
+- Pair routes.
+- Tri routes.
+- RFQ-backed routes.
+- Fallback candidates.
+
+Every candidate must stay inside the shared outcome core.
+
+## Route score
+
+Lotus should score routes by expected user outcome, not venue count.
+
+For a buy:
+
+```text
+expectedShares = notional / expectedAveragePrice
+```
+
+For a sell:
+
+```text
+expectedProceeds = shares * expectedAveragePrice
+```
+
+Then adjust for risk and costs:
+
+```text
+netScore = expectedUserOutcome
+  - expectedVenueFees
+  - expectedBuilderFees
+  - expectedProtocolFees
+  - slippagePenalty
+  - executionRiskPenalty
+```
+
+The highest safe `netScore` wins.
+
+## Leg-count tiebreaker
+
+If two routes are nearly equal, Lotus should prefer the simpler route.
+
+Typical tiebreaker:
+
+```text
+SINGLE over PAIR over TRI
+```
+
+This avoids adding coordination risk when the user does not get meaningful improvement.
+
+## Minimum improvement
+
+Pair and tri routes should clear a minimum improvement threshold.
+
+```text
+improvementBps = (selectedNetOutcome - baselineNetOutcome)
+  / baselineNetOutcome
+  * 10000
+```
+
+The route should execute only if:
+
+```text
+improvementBps >= minimumRouteImprovementBps
+```
+
+This keeps Lotus from choosing complex routes for tiny theoretical gains.
+
+## Execution gates
+
+Before a route can be selected for execution, Lotus checks:
+
+- Fresh live quote.
+- Valid venue market and outcome IDs.
+- Funding or sellable position readiness.
+- Supported signing path.
+- Supported submit path.
+- Slippage tolerance.
+- Settlement verification support.
+- Idempotency and replay protection.
+
+If a route fails these gates, it can still be useful for diagnostics, but it should not be executable.
+
+## Why this creates surplus
+
+Surplus exists when the selected route produces a better user outcome than the baseline.
+
+For example, a pair route can buy more shares with the same USDC than a single-venue route. Lotus can share that positive improvement with the user, builder, and protocol according to the active fee policy.
+
+<Note>
+  The router optimizes display and execution differently. Display prices can be fast snapshots; execution routes require fresh checks.
+</Note>

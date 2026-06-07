@@ -1,5 +1,61 @@
 ---
-title: "Revenue Distribution"
+title: "Revenue distribution"
+description: "How realized surplus moves to users, builders, LPs, and Lotus."
 ---
 
-Distributes surplus across the user, LPs (where applicable), builders, and the protocol per active fee policy.
+Revenue distribution happens after settlement verification.
+
+Lotus should not distribute protocol or builder revenue from an estimated preview. It should use verified fills and the active fee policy.
+
+## Distribution order
+
+1. Verify venue fills.
+2. Recalculate realized surplus.
+3. Apply fee caps.
+4. Allocate builder fee, if configured.
+5. Allocate protocol fee.
+6. Leave remaining improvement with the user.
+7. Write ledger entries.
+
+## Distribution formula
+
+```text
+S_net_user = S_gross - F_protocol - F_builder - F_lp
+```
+
+`F_lp` is optional and applies only if a liquidity partner rebate or fee policy is active.
+
+## Who receives what
+
+| Recipient | Receives |
+| --- | --- |
+| User | Base execution outcome plus retained surplus. |
+| Builder | Configured builder fee, if eligible. |
+| LP | Configured rebate or fee, if an RFQ policy applies. |
+| Lotus protocol | Protocol surplus fee. |
+
+## When revenue is zero
+
+Revenue should be zero when:
+
+- The order fails.
+- The route does not improve the baseline.
+- Settlement verification is incomplete.
+- The fee policy does not apply.
+- Fees would make the user worse off.
+
+## Accounting entries
+
+Each distribution should produce ledger entries:
+
+- `SURPLUS_REALIZED`
+- `USER_SURPLUS_RETAINED`
+- `PROTOCOL_FEE`
+- `BUILDER_FEE`
+- `LP_REBATE` or `LP_FEE`, if applicable
+
+These entries should reference the same execution ID and fee policy version.
+
+<Warning>
+  Distribution should be auditable and replay-safe. Duplicate settlement events must not duplicate revenue.
+</Warning>

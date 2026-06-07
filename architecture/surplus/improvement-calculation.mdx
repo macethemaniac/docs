@@ -1,5 +1,107 @@
 ---
-title: "Improvement Calculation"
+title: "Improvement calculation"
+description: "Reference formulas for calculating Lotus route improvement."
 ---
 
-Surplus is the price improvement of the executed route vs. a reference single-venue baseline computed at preview time and re-verified after settlement.
+Improvement calculation compares the verified execution result against a safe reference route.
+
+The reference route must be reproducible from preview-time inputs. The final improvement must be recalculated from verified fills.
+
+## Inputs
+
+The calculation needs:
+
+- User ID.
+- Canonical market and outcome.
+- Side.
+- Notional or share size.
+- Venue preference.
+- Order policy.
+- Slippage tolerance.
+- Reference route.
+- Executed route.
+- Per-leg fills.
+- Fee policy version.
+
+## Reference route
+
+The reference route is the best safe single-venue candidate at preview time.
+
+It should be:
+
+- Fresh.
+- Executable.
+- Inside the shared outcome core.
+- Supported by the venue submit path.
+- Available for the same side and size.
+
+If no reliable reference exists, Lotus should not show a surplus number.
+
+## Buy improvement
+
+For buys, improvement is extra shares from the same spend.
+
+```text
+Q_ref = N / P_ref
+Q_exec = sum(filled shares)
+Delta_Q = max(0, Q_exec - Q_ref)
+S_gross = Delta_Q * P_exec
+```
+
+`S_gross` is a USDC-normalized value so it can be used for fee policy.
+
+## Sell improvement
+
+For sells, improvement is extra USDC from the same shares.
+
+```text
+USDC_ref = Q * P_ref
+USDC_exec = sum(leg proceeds)
+S_gross = max(0, USDC_exec - USDC_ref)
+```
+
+## Route acceptance
+
+A candidate route should pass:
+
+```text
+selectedNetOutcome > baselineNetOutcome
+```
+
+For pair and tri routes, Lotus should also require:
+
+```text
+improvementBps >= minimumRouteImprovementBps
+```
+
+This prevents route complexity when the improvement is too small to justify extra execution risk.
+
+## Rounding
+
+Surplus math should use integer-safe units where possible.
+
+Recommended units:
+
+- USDC minor units for value.
+- Fixed-point bps for fee rates.
+- Venue-native integer token units for share quantities.
+
+Round in favor of the user when presenting or distributing surplus.
+
+## Audit fields
+
+Store enough data to reproduce:
+
+- `referenceRouteId`
+- `referenceAveragePrice`
+- `executedAveragePrice`
+- `grossSurplus`
+- `feePolicyVersion`
+- `protocolFee`
+- `builderFee`
+- `userRetainedSurplus`
+- `calculationVersion`
+
+<Warning>
+  Never calculate realized improvement from display snapshots. Use verified fills.
+</Warning>

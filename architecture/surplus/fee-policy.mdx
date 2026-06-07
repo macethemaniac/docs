@@ -1,5 +1,84 @@
 ---
-title: "Fee Policy"
+title: "Fee policy"
+description: "How Lotus defines protocol and builder fee rules."
 ---
 
-Defines protocol fees, builder fees, and LP rebate splits. Fee policy is versioned and applied per execution.
+Fee policy defines how positive surplus is split.
+
+The policy is versioned so a receipt can always explain which rules were active when an order executed.
+
+## Policy fields
+
+A fee policy can include:
+
+| Field | Meaning |
+| --- | --- |
+| `policyVersion` | Immutable version used on receipts. |
+| `protocolShareBps` | Share of positive surplus captured by Lotus. |
+| `builderShareBps` | Share of positive surplus paid to the integrating builder. |
+| `maxProtocolFeeBpsOfNotional` | Cap on protocol fee as a share of order notional. |
+| `maxBuilderFeeBpsOfNotional` | Cap on builder fee as a share of order notional. |
+| `minimumUserSurplusBps` | Minimum improvement the user must retain after fees. |
+| `eligibleRouteTypes` | Route types where the policy applies. |
+| `eligibleOrderPolicies` | Order policies where the policy applies. |
+
+## Protocol fee formula
+
+```text
+F_protocol = min(
+  S_gross * protocolShareBps / 10000,
+  N * maxProtocolFeeBpsOfNotional / 10000
+)
+```
+
+## Builder fee formula
+
+```text
+F_builder = min(
+  S_gross * builderShareBps / 10000,
+  N * maxBuilderFeeBpsOfNotional / 10000
+)
+```
+
+## User-positive check
+
+The user should keep positive improvement after fees:
+
+```text
+S_net_user = S_gross - F_protocol - F_builder
+```
+
+Required condition:
+
+```text
+S_net_user >= N * minimumUserSurplusBps / 10000
+```
+
+If this fails, the route should not advertise savings.
+
+## Eligibility
+
+Fee policy should apply only when:
+
+- The order fills.
+- Settlement verification passes.
+- Realized surplus is positive.
+- The route is eligible under the active policy.
+- The user remains better off after fees.
+
+Failed orders should not create surplus fees.
+
+## Receipt requirements
+
+Receipts should show:
+
+- Policy version.
+- Gross surplus.
+- Protocol fee.
+- Builder fee.
+- User-retained surplus.
+- Fee caps applied, if any.
+
+<Note>
+  Fee policy is part of the execution contract. It should be explicit before the user places an order.
+</Note>
