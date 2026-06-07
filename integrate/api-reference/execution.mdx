@@ -1,0 +1,26 @@
+---
+title: "Execution API"
+description: "Issue ESTs, execute routes, inspect executions."
+---
+
+## Create Execution Scope Token
+
+```http
+POST /executions/scope-token
+```
+
+## Execute route
+
+```http
+POST /executions
+```
+
+Uses a valid EST to run the bound route across venues.
+
+## Get execution
+
+```http
+GET /executions/{execution_id}
+```
+
+Returns per-leg fills, settlement verification, and surplus.

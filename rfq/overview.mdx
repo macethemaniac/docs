@@ -1,0 +1,14 @@
+---
+title: "Overview"
+description: "How Lotus RFQs work."
+---
+
+Lotus RFQ is a structured request-for-quote flow that connects liquidity providers (LPs) to canonical market demand routed through Lotus.
+
+When book depth is insufficient or an LP can quote inside the book, Lotus broadcasts an RFQ to eligible LPs. LPs respond with quotes; Lotus selects the dominating quote and binds it to an EST for execution.
+
+LPs benefit from:
+
+- **Pre-funded counterparties** — Lotus only routes against pre-funded users.
+- **Scoped flow** — each RFQ is bound to a canonical market and size.
+- **Structured selection** — deterministic scoring based on price, latency, and reliability.

@@ -1,0 +1,28 @@
+---
+title: "Markets API"
+description: "List, fetch, and search canonical markets."
+---
+
+## List markets
+
+```http
+GET /markets
+```
+
+Filter by category, venue coverage, or resolution timing.
+
+## Get market
+
+```http
+GET /markets/{canonical_market_id}
+```
+
+Returns the canonical market with underlying venue markets and shared outcome core.
+
+## Search markets
+
+```http
+GET /markets/search?q=...
+```
+
+Full-text search across canonical markets.

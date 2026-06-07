@@ -1,0 +1,13 @@
+---
+title: "Rate Limits"
+---
+
+Rate limits are per API key. Response headers:
+
+```text
+X-RateLimit-Limit: 600
+X-RateLimit-Remaining: 597
+X-RateLimit-Reset: 1717000000
+```
+
+Exceeding the limit returns `429 Too Many Requests`.

@@ -1,0 +1,15 @@
+---
+title: "JavaScript"
+description: "Official Lotus JavaScript SDK."
+---
+
+```bash
+npm install @lotus/sdk
+```
+
+```js
+import { Lotus } from "@lotus/sdk";
+
+const lotus = new Lotus({ apiKey: process.env.LOTUS_API_KEY });
+const markets = await lotus.markets.list();
+```

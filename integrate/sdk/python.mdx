@@ -1,0 +1,15 @@
+---
+title: "Python"
+description: "Official Lotus Python SDK."
+---
+
+```bash
+pip install lotus-sdk
+```
+
+```python
+from lotus import Lotus
+
+lotus = Lotus(api_key=os.environ["LOTUS_API_KEY"])
+markets = lotus.markets.list()
+```

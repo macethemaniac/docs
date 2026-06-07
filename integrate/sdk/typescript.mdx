@@ -1,0 +1,11 @@
+---
+title: "TypeScript"
+description: "Typed bindings for the Lotus API."
+---
+
+```ts
+import { Lotus, CanonicalMarket } from "@lotus/sdk";
+
+const lotus = new Lotus({ apiKey: process.env.LOTUS_API_KEY! });
+const markets: CanonicalMarket[] = await lotus.markets.list();
+```

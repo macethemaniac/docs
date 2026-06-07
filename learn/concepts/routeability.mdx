@@ -1,0 +1,14 @@
+---
+title: "Routeability"
+description: "Whether a route can be safely executed."
+---
+
+**Routeability** is the determination that a candidate route can be safely executed. A route is routeable when:
+
+1. All legs share an outcome core.
+2. All venues are live and quoting.
+3. Rule compatibility holds for the targeted outcome.
+4. Replay and scope protections are satisfiable.
+5. User slippage and risk preferences can be honored.
+
+If any check fails, the route is non-routeable.

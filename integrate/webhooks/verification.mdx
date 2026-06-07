@@ -1,0 +1,5 @@
+---
+title: "Verification"
+---
+
+Lotus signs every webhook with an HMAC. Verify by recomputing the HMAC over the raw request body and comparing it to the `X-Lotus-Signature` header.

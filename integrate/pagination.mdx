@@ -1,0 +1,12 @@
+---
+title: "Pagination"
+---
+
+List endpoints are cursor-paginated. Pass `cursor` and `limit` query parameters. Responses include `next_cursor` when more results are available.
+
+```json
+{
+  "data": [...],
+  "next_cursor": "eyJ..."
+}
+```

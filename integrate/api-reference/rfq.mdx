@@ -1,0 +1,42 @@
+---
+title: "RFQ API"
+description: "Create, inspect, accept, and cancel RFQs."
+---
+
+## Create RFQ
+
+```http
+POST /rfq
+```
+
+Body:
+
+```json
+{
+  "canonical_market_id": "cm_...",
+  "side": "buy",
+  "size": 1000,
+  "max_price": 0.62,
+  "expires_in": 30
+}
+```
+
+## Get RFQ
+
+```http
+GET /rfq/{rfq_id}
+```
+
+## Accept RFQ
+
+```http
+POST /rfq/{rfq_id}/accept
+```
+
+Returns an EST bound to the accepted route.
+
+## Cancel RFQ
+
+```http
+POST /rfq/{rfq_id}/cancel
+```

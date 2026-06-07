@@ -21,20 +21,362 @@
         ]
       }
     ],
-    "global": {
-      "anchors": [
-        {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
-        },
-        {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
-        }
-      ]
-    }
+    "tabs": [
+      {
+        "tab": "Home",
+        "pages": [
+          "index"
+        ]
+      },
+      {
+        "tab": "Learn",
+        "groups": [
+          {
+            "group": "Overview",
+            "icon": "book-open",
+            "pages": [
+              "learn/what-is-lotus",
+              "learn/why-lotus-exists"
+            ]
+          },
+          {
+            "group": "Who Lotus Is For",
+            "icon": "users",
+            "pages": [
+              "learn/who/retail-traders",
+              "learn/who/professional-traders",
+              "learn/who/market-makers",
+              "learn/who/wallets-applications",
+              "learn/who/infra-teams"
+            ]
+          },
+          {
+            "group": "Core Concepts",
+            "icon": "lightbulb",
+            "pages": [
+              "learn/concepts/canonical-markets",
+              "learn/concepts/shared-outcome-core",
+              "learn/concepts/routeability",
+              "learn/concepts/pair-routes",
+              "learn/concepts/tri-routes",
+              "learn/concepts/rule-compatibility",
+              "learn/concepts/smart-routing",
+              "learn/concepts/execution-scope-tokens",
+              "learn/concepts/settlement-verification",
+              "learn/concepts/fail-closed"
+            ]
+          },
+          {
+            "group": "How Lotus Works",
+            "icon": "workflow",
+            "pages": [
+              "learn/how/discovery",
+              "learn/how/canonicalization",
+              "learn/how/route-discovery",
+              "learn/how/rfq-layer",
+              "learn/how/routing-engine",
+              "learn/how/execution-layer",
+              "learn/how/funding-layer",
+              "learn/how/accounting-layer",
+              "learn/how/surplus-accounting"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Guides",
+        "groups": [
+          {
+            "group": "Trading Guides",
+            "icon": "chart-candlestick",
+            "pages": [
+              "guides/trading/understanding-pair-routes",
+              "guides/trading/understanding-tri-routes",
+              "guides/trading/understanding-savings",
+              "guides/trading/understanding-slippage",
+              "guides/trading/understanding-fallbacks",
+              "guides/trading/understanding-risk-states",
+              "guides/trading/understanding-settlement"
+            ]
+          },
+          {
+            "group": "Funding Guides",
+            "icon": "banknote",
+            "pages": [
+              "guides/funding/overview",
+              "guides/funding/status",
+              "guides/funding/readiness",
+              "guides/funding/across-venues",
+              "guides/funding/withdrawal-flow"
+            ]
+          },
+          {
+            "group": "Advanced Guides",
+            "icon": "graduation-cap",
+            "pages": [
+              "guides/advanced/reading-route-details",
+              "guides/advanced/reading-execution-receipts",
+              "guides/advanced/understanding-surplus-capture",
+              "guides/advanced/understanding-builder-fees",
+              "guides/advanced/understanding-execution-scope-tokens"
+            ]
+          },
+          {
+            "group": "Getting Started",
+            "icon": "rocket",
+            "pages": []
+          }
+        ]
+      },
+      {
+        "tab": "Integrate",
+        "groups": [
+          {
+            "group": "Getting Started",
+            "icon": "rocket",
+            "pages": [
+              "integrate/overview",
+              "integrate/authentication",
+              "integrate/environments",
+              "integrate/rate-limits",
+              "integrate/errors",
+              "integrate/pagination"
+            ]
+          },
+          {
+            "group": "API Reference",
+            "icon": "code",
+            "pages": [
+              "integrate/api-reference/markets",
+              "integrate/api-reference/rfq",
+              "integrate/api-reference/execution",
+              "integrate/api-reference/position",
+              "integrate/api-reference/funding",
+              "integrate/api-reference/withdrawal",
+              "integrate/api-reference/admin"
+            ]
+          },
+          {
+            "group": "Webhooks",
+            "icon": "webhook",
+            "pages": [
+              "integrate/webhooks/overview",
+              "integrate/webhooks/verification",
+              "integrate/webhooks/retry-logic",
+              "integrate/webhooks/event-types"
+            ]
+          },
+          {
+            "group": "WebSockets",
+            "icon": "radio",
+            "pages": [
+              "integrate/websockets/market-streams",
+              "integrate/websockets/rfq-streams",
+              "integrate/websockets/execution-streams",
+              "integrate/websockets/funding-streams"
+            ]
+          },
+          {
+            "group": "SDK",
+            "icon": "package",
+            "pages": [
+              "integrate/sdk/javascript",
+              "integrate/sdk/typescript",
+              "integrate/sdk/python",
+              "integrate/sdk/examples"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Lotus RFQ",
+        "groups": [
+          {
+            "group": "Overview",
+            "icon": "book-open",
+            "pages": [
+              "rfq/overview"
+            ]
+          },
+          {
+            "group": "RFQ Lifecycle",
+            "icon": "repeat",
+            "pages": [
+              "rfq/lifecycle/quote-lifecycle",
+              "rfq/lifecycle/route-selection",
+              "rfq/lifecycle/expiration",
+              "rfq/lifecycle/settlement"
+            ]
+          },
+          {
+            "group": "Market Maker Integration",
+            "icon": "plug",
+            "pages": [
+              "rfq/integration/lp-authentication",
+              "rfq/integration/quote-submission",
+              "rfq/integration/quote-status",
+              "rfq/integration/risk-controls",
+              "rfq/integration/websockets",
+              "rfq/integration/webhooks",
+              "rfq/integration/sandbox",
+              "rfq/integration/metrics"
+            ]
+          },
+          {
+            "group": "RFQ Best Practices",
+            "icon": "star",
+            "pages": [
+              "rfq/best-practices/quote-quality",
+              "rfq/best-practices/latency",
+              "rfq/best-practices/reliability",
+              "rfq/best-practices/fill-rate",
+              "rfq/best-practices/pricing"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Lotus LP",
+        "pages": [
+          "lp/coming-soon"
+        ]
+      },
+      {
+        "tab": "Architecture",
+        "groups": [
+          {
+            "group": "System Overview",
+            "icon": "layers",
+            "pages": [
+              "architecture/overview/system-overview",
+              "architecture/overview/canonical-layer",
+              "architecture/overview/rfq-layer",
+              "architecture/overview/routing-layer",
+              "architecture/overview/execution-layer",
+              "architecture/overview/funding-layer",
+              "architecture/overview/accounting-layer",
+              "architecture/overview/observability-layer"
+            ]
+          },
+          {
+            "group": "Smart Routing",
+            "icon": "route",
+            "pages": [
+              "architecture/routing/route-discovery",
+              "architecture/routing/route-optimization",
+              "architecture/routing/fallback-planning",
+              "architecture/routing/route-transparency"
+            ]
+          },
+          {
+            "group": "Position Abstraction",
+            "icon": "wallet",
+            "pages": [
+              "architecture/positions/unified-positions",
+              "architecture/positions/venue-positions",
+              "architecture/positions/position-accounting"
+            ]
+          },
+          {
+            "group": "Surplus Capture",
+            "icon": "coins",
+            "pages": [
+              "architecture/surplus/improvement-calculation",
+              "architecture/surplus/fee-policy",
+              "architecture/surplus/revenue-distribution",
+              "architecture/surplus/security-requirements"
+            ]
+          },
+          {
+            "group": "Chain Routers",
+            "icon": "link",
+            "pages": [
+              "architecture/chain-routers/polygon-router",
+              "architecture/chain-routers/base-router",
+              "architecture/chain-routers/bnb-router"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Security",
+        "groups": [
+          {
+            "group": "Security Model",
+            "icon": "shield",
+            "pages": [
+              "security/model/fail-closed",
+              "security/model/replay-protection",
+              "security/model/execution-scope-tokens",
+              "security/model/settlement-verification",
+              "security/model/funding-security",
+              "security/model/auditability"
+            ]
+          },
+          {
+            "group": "Security Reviews",
+            "icon": "file-check",
+            "pages": [
+              "security/reviews/architecture-decisions",
+              "security/reviews/known-risks",
+              "security/reviews/mitigations"
+            ]
+          },
+          {
+            "group": "Incident Process",
+            "icon": "siren",
+            "pages": [
+              "security/incident-process"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Admin",
+        "hidden": false,
+        "href": "https://docs.uselotus.xyz/admin"
+      },
+      {
+        "tab": "Changelog",
+        "groups": [
+          {
+            "group": "Changelog",
+            "icon": "history",
+            "pages": [
+              "changelog/releases",
+              "changelog/breaking-changes",
+              "changelog/deprecations",
+              "changelog/migration-guides"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Glossary",
+        "groups": [
+          {
+            "group": "Glossary",
+            "icon": "book-a",
+            "pages": [
+              "glossary/canonical-market",
+              "glossary/routeability",
+              "glossary/pair-route",
+              "glossary/tri-route",
+              "glossary/rfq",
+              "glossary/execution-scope-token",
+              "glossary/settlement-verification",
+              "glossary/shared-outcome-core",
+              "glossary/rule-compatibility",
+              "glossary/fallback-route",
+              "glossary/surplus",
+              "glossary/builder-fee",
+              "glossary/ghost-fill",
+              "glossary/funding-readiness"
+            ]
+          }
+        ]
+      }
+    ]
   },
   "logo": {
     "light": "/images/Frame2lotus.png",

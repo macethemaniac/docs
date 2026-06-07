@@ -1,0 +1,33 @@
+---
+title: "Examples"
+description: "Common patterns: RFQs, subscriptions, executions."
+---
+
+## Create and accept an RFQ
+
+```ts
+const rfq = await lotus.rfq.create({
+  canonicalMarketId: "cm_...",
+  side: "buy",
+  size: 1000,
+  maxPrice: 0.62,
+  expiresIn: 30,
+});
+
+const est = await lotus.rfq.accept(rfq.id, { quoteId: "q_..." });
+await lotus.executions.execute({ scopeToken: est.token });
+```
+
+## Subscribe to market data
+
+```ts
+const sub = lotus.streams.markets.subscribe("cm_...");
+sub.on("tick", (tick) => console.log(tick));
+```
+
+## Monitor executions
+
+```ts
+const sub = lotus.streams.executions.subscribe();
+sub.on("execution.completed", (event) => console.log(event));
+```
