@@ -3,4 +3,87 @@ title: "Accounting layer"
 description: "The system of record for fills, positions, balances, and revenue."
 ---
 
-The accounting layer is the source of truth for executions, positions, surplus, and protocol monetization.
+The accounting layer records what actually happened after execution.
+
+It is responsible for turning venue fills into user positions, funding updates, settlement status, surplus math, and protocol revenue.
+
+## What accounting records
+
+For every execution, Lotus records:
+
+- User intent.
+- Quote and route used.
+- Execution scope token.
+- Venue order IDs.
+- Per-leg fills.
+- Average fill price.
+- Settlement verification status.
+- Position updates.
+- Balance updates.
+- Surplus and fee ledger entries.
+
+The route preview explains what should happen. The accounting layer records what did happen.
+
+## Why accounting is separate from routing
+
+Routing is a decision engine.
+
+Accounting is a system of record.
+
+This separation matters because venues can accept, partially fill, reject, or report fills after the first submit response. Lotus should not treat an order as fully complete until accounting has verified the result.
+
+## Ledger model
+
+A verified execution can produce several ledger entries:
+
+| Entry | Purpose |
+| --- | --- |
+| `TRADE_FILL` | Records the filled shares and price. |
+| `POSITION_UPDATE` | Updates the user's outcome exposure. |
+| `VENUE_BALANCE_UPDATE` | Reconciles venue-ready cash or position. |
+| `SURPLUS_ESTIMATE` | Stores preview-time improvement. |
+| `SURPLUS_REALIZED` | Stores verified improvement. |
+| `PROTOCOL_FEE` | Records Lotus revenue. |
+| `BUILDER_FEE` | Records partner revenue, if configured. |
+| `SETTLEMENT_VERIFIED` | Marks the execution as reconciled. |
+
+Entries should be append-only or reproducible from immutable inputs.
+
+## Revenue recognition
+
+Lotus should recognize protocol revenue only when:
+
+1. The order filled.
+2. Settlement verification passed.
+3. Realized surplus is positive.
+4. The active fee policy allows capture.
+5. The user remains better off after fees.
+
+If a route fails or produces no positive improvement, the protocol should not record a surplus fee.
+
+## Reconciliation rules
+
+Accounting must reconcile:
+
+- User-facing trade history.
+- Venue order status.
+- Settlement status.
+- Portfolio positions.
+- Venue balances.
+- Protocol and builder fee ledgers.
+
+If these disagree, Lotus should mark the execution for review or recovery instead of hiding the mismatch.
+
+## Common failure cases
+
+The accounting layer protects against:
+
+- Venue fills that remain stuck as pending in Lotus.
+- Duplicate submits creating duplicate ledger entries.
+- Fees charged on failed orders.
+- Sell routes that cannot match verified positions.
+- Surplus calculated against stale or unreachable liquidity.
+
+<Warning>
+  Accounting should never rely on frontend state. It must be derived from backend execution and venue verification.
+</Warning>

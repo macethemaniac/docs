@@ -3,4 +3,71 @@ title: "Security requirements"
 description: "Controls that keep surplus and fee accounting safe."
 ---
 
-Surplus calculation must be reproducible from logged inputs. Distribution flows are signed and auditable.
+Surplus accounting is a financial control surface.
+
+The system must prevent stale baselines, duplicate fee capture, hidden fee changes, and non-reproducible receipts.
+
+## Required controls
+
+Lotus should enforce:
+
+- Versioned fee policies.
+- Immutable reference route inputs.
+- Verified fills for realized surplus.
+- Idempotent settlement processing.
+- Signed or access-controlled policy changes.
+- Receipt-level fee disclosure.
+- User-positive route checks.
+- No fee capture on failed orders.
+
+## Replay protection
+
+The same execution should not create revenue twice.
+
+Recommended idempotency key:
+
+```text
+executionId + settlementEventId + feePolicyVersion
+```
+
+If the same settlement event is processed again, Lotus should return the existing ledger state.
+
+## Baseline integrity
+
+The baseline route should be stored with:
+
+- Source quotes.
+- Timestamp.
+- Venue IDs.
+- Average price.
+- Depth used.
+- Eligibility checks.
+- Calculation version.
+
+This prevents Lotus from changing the baseline after execution to manufacture surplus.
+
+## Policy integrity
+
+Fee policy changes should be:
+
+- Versioned.
+- Logged.
+- Access controlled.
+- Effective only after a clear activation time.
+- Included on receipts.
+
+## Data minimization
+
+Receipts should expose enough detail to audit execution, but not secrets.
+
+Do not expose:
+
+- Venue API secrets.
+- Private keys.
+- Raw signed payloads.
+- Internal auth tokens.
+- Provider headers.
+
+<Warning>
+  A surplus model is trustworthy only if the user can reproduce why a fee was charged.
+</Warning>

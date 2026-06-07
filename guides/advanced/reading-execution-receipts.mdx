@@ -29,6 +29,23 @@ A receipt can include:
 
 The receipt should be enough to reconstruct the execution outcome.
 
+## Math fields
+
+A receipt should make the surplus math auditable.
+
+Look for:
+
+- `referenceAveragePrice`
+- `executedAveragePrice`
+- `grossSurplus`
+- `protocolFee`
+- `builderFee`
+- `userRetainedSurplus`
+- `feePolicyVersion`
+- `calculationVersion`
+
+For a buy, the receipt may also show extra shares received versus the baseline. For a sell, it should show extra proceeds versus the baseline.
+
 ## Reading per-leg fills
 
 For every route leg, check:
