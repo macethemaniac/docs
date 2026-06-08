@@ -1,11 +1,24 @@
 ---
 title: "Fee policy"
-description: "How Lotus defines protocol and builder fee rules."
+description: "How Lotus defines fee rules for price improvement and share improvement."
 ---
 
-Fee policy defines how positive surplus is split.
+Fee policy defines how surplus and share improvement are split between users and the protocol.
 
 The policy is versioned so a receipt can always explain which rules were active when an order executed.
+
+## Fee types
+
+Lotus captures fees on two distinct improvement types:
+
+| Fee type | Source | Timing |
+| --- | --- | --- |
+| Price improvement fee | Better execution price versus the single-venue baseline | After settlement verification |
+| Share improvement fee | Extra shares filled beyond what any single venue could supply | At execution time |
+| Execution fee | Flat fee on filled notional | At execution time |
+| Fast lane fee | Optional fee for prioritized execution | At execution time |
+
+Price improvement and share improvement are independent — an order can produce one, both, or neither.
 
 ## Policy fields
 
@@ -14,38 +27,55 @@ A fee policy can include:
 | Field | Meaning |
 | --- | --- |
 | `policyVersion` | Immutable version used on receipts. |
-| `protocolShareBps` | Share of positive surplus captured by Lotus. |
-| `builderShareBps` | Share of positive surplus paid to the integrating builder. |
-| `maxProtocolFeeBpsOfNotional` | Cap on protocol fee as a share of order notional. |
+| `priceImprovementShareBps` | Lotus capture rate on price improvement, in bps. |
+| `shareImprovementShareBps` | Lotus capture rate on share improvement value, in bps. |
+| `executionFeeBps` | Flat fee on filled notional, in bps. |
+| `maxTotalFeeBpsOfNotional` | Cap on total Lotus fees as a share of order notional. |
+| `builderShareBps` | Share of price improvement paid to the integrating builder. |
 | `maxBuilderFeeBpsOfNotional` | Cap on builder fee as a share of order notional. |
 | `minimumUserSurplusBps` | Minimum improvement the user must retain after fees. |
 | `eligibleRouteTypes` | Route types where the policy applies. |
-| `eligibleOrderPolicies` | Order policies where the policy applies. |
 
-## Protocol fee formula
+## Price improvement fee formula
 
 ```text
-F_protocol = min(
-  S_gross * protocolShareBps / 10000,
-  N * maxProtocolFeeBpsOfNotional / 10000
+priceImprovementFee = min(
+  S_price * priceImprovementShareBps / 10000,
+  N * maxTotalFeeBpsOfNotional / 10000
 )
 ```
+
+`S_price` is the USDC-normalized price improvement measured from verified fills.
+
+## Share improvement fee formula
+
+Share improvement is charged on the market value of extra shares obtained through multi-venue routing.
+
+```text
+extraShares = max(0, Q_exec - singleVenueMaxFillSize)
+S_share = extraShares * P_exec
+shareImprovementFee = S_share * shareImprovementShareBps / 10000
+```
+
+`singleVenueMaxFillSize` is committed at quote time. It represents the maximum fill available from the best single-venue alternative. Users receive the extra shares in full; Lotus captures only the configured share of their USDC value.
 
 ## Builder fee formula
 
 ```text
-F_builder = min(
-  S_gross * builderShareBps / 10000,
+builderFee = min(
+  S_price * builderShareBps / 10000,
   N * maxBuilderFeeBpsOfNotional / 10000
 )
 ```
+
+Builder fees apply to price improvement only, not share improvement.
 
 ## User-positive check
 
 The user should keep positive improvement after fees:
 
 ```text
-S_net_user = S_gross - F_protocol - F_builder
+S_net_user = S_price - priceImprovementFee - builderFee
 ```
 
 Required condition:
@@ -61,8 +91,8 @@ If this fails, the route should not advertise savings.
 Fee policy should apply only when:
 
 - The order fills.
-- Settlement verification passes.
-- Realized surplus is positive.
+- Settlement verification passes (for price improvement fees).
+- Realized improvement is positive.
 - The route is eligible under the active policy.
 - The user remains better off after fees.
 
@@ -73,12 +103,13 @@ Failed orders should not create surplus fees.
 Receipts should show:
 
 - Policy version.
-- Gross surplus.
-- Protocol fee.
-- Builder fee.
-- User-retained surplus.
-- Fee caps applied, if any.
+- Price improvement (gross and fee).
+- Share improvement shares and fee, if any.
+- Execution fee, if any.
+- Builder fee, if any.
+- Total Lotus fee.
+- Fee cap applied, if any.
 
 <Note>
-  Fee policy is part of the execution contract. It should be explicit before the user places an order.
+  Fee policy is part of the execution contract. It is disclosed before the user places an order.
 </Note>

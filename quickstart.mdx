@@ -1,0 +1,141 @@
+---
+title: "Quickstart"
+description: "Get up and running with Lotus in a few steps."
+---
+
+Lotus gives you a single execution surface across prediction market venues. This guide covers connecting a wallet, getting a route quote, and placing your first trade.
+
+<Note>
+  Lotus is currently in private access. Reach out at [hi@uselotus.xyz](mailto:hi@uselotus.xyz) to request access.
+</Note>
+
+## Step 1: Connect a wallet
+
+Lotus requires a wallet to sign orders and hold prediction market positions.
+
+Supported signing methods:
+
+- **EIP-712 (MetaMask, WalletConnect, hardware wallets)** — standard for Polymarket-compatible routes.
+- **Managed wallets via Turnkey** — embedded wallet provisioned by Lotus for users who prefer not to manage keys directly.
+
+Go to the Lotus app and follow the wallet connection prompt. For API integrations, see [Authentication](/integrate/authentication).
+
+## Step 2: Fund your account
+
+Prediction market positions require USDC collateral deposited at the relevant venue.
+
+Lotus checks venue funding readiness before accepting an order. If your account is not funded at the target venue, the route will be blocked before submission.
+
+See [Funding overview](/guides/funding/overview) for deposit flows per venue.
+
+## Step 3: Get a route quote
+
+Lotus prices routes live before you commit.
+
+### In the app
+
+1. Search for a market.
+2. Pick an outcome and side (Buy or Sell).
+3. Enter your size.
+4. Lotus returns the best available route with estimated savings.
+
+### Via API
+
+```http
+POST /execution/quote
+Authorization: Bearer <token>
+
+{
+  "side": "buy",
+  "marketId": "<canonical-market-id>",
+  "outcomeId": "YES",
+  "amount": "100",
+  "candidates": [...]
+}
+```
+
+The response includes:
+
+- `routeType` — `SINGLE_VENUE`, `CROSS_VENUE` (pair or tri), or `RFQ_BACKED`.
+- `expectedPrice` — the blended average execution price.
+- `estimatedSavings` — improvement over the single-venue baseline, if any.
+- `singleVenueMaxFillSize` — the maximum shares available from the best single venue alone. If the route fills beyond this, the extra shares came from multi-venue routing.
+- `legs` — per-venue allocations, sizes, and prices.
+- `requiredUserSignatureSteps` — which legs need a wallet signature before submit.
+
+See [Execution API reference](/integrate/api-reference/execution) for the full schema.
+
+## Step 4: Place the order
+
+If the route requires no signature, it submits immediately. If a signature is needed:
+
+1. Lotus returns a `signatureRequests` array.
+2. Sign each request with your wallet.
+3. Submit the signed bundle.
+
+```http
+POST /execution/{executionId}/submit-signed-bundle
+Authorization: Bearer <token>
+
+{
+  "signedLegs": [...]
+}
+```
+
+Lotus then submits each leg to the relevant venue and tracks the fill.
+
+## Step 5: Track execution
+
+After submission, check the status of your order:
+
+```http
+GET /execution/orders/{orderId}/status
+Authorization: Bearer <token>
+```
+
+Possible states:
+
+| State | Meaning |
+| --- | --- |
+| `SUBMITTED` | Sent to venue, awaiting fill confirmation. |
+| `FILLED` | All legs filled. Settlement verification in progress. |
+| `FAILED` | Submission or fill failed. See blockers. |
+| `NEEDS_SIGNATURE` | Waiting for wallet signature before submit. |
+
+## Step 6: View your positions
+
+Once filled and settled, your position appears in your portfolio:
+
+```http
+GET /position
+Authorization: Bearer <token>
+```
+
+Positions are unified across venues. A Polymarket YES share and a Limitless YES share on the same market appear as one position.
+
+## What happens behind the scenes
+
+Every Lotus order goes through a consistent flow:
+
+1. Market discovery and normalization across venues.
+2. Route scoring — price, depth, fees, slippage, rule compatibility.
+3. Execution scope check — the route must be approved for the selected lane.
+4. Submission to venue adapters per leg.
+5. Fill tracking and settlement verification.
+6. Surplus accounting — price improvement and share improvement calculated from verified fills.
+7. Position and revenue ledger updated.
+
+<CardGroup cols={2}>
+  <Card title="API Reference" icon="code" href="/integrate/api-reference/execution">
+    Full execution endpoint schema.
+  </Card>
+  <Card title="Understanding savings" icon="coins" href="/guides/trading/understanding-savings">
+    How Lotus measures and reports price improvement.
+  </Card>
+  <Card title="Pair and tri routes" icon="route" href="/guides/trading/understanding-pair-routes">
+    Multi-venue routing mechanics.
+  </Card>
+  <Card title="RFQ / Market Makers" icon="handshake" href="/rfq/overview">
+    Provide liquidity into Lotus.
+  </Card>
+</CardGroup>

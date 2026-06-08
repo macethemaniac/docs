@@ -1,11 +1,16 @@
 ---
 title: "Improvement calculation"
-description: "Reference formulas for calculating Lotus route improvement."
+description: "Reference formulas for calculating Lotus route improvement, including price improvement and share improvement."
 ---
 
 Improvement calculation compares the verified execution result against a safe reference route.
 
 The reference route must be reproducible from preview-time inputs. The final improvement must be recalculated from verified fills.
+
+Lotus recognizes two distinct types of improvement:
+
+- **Price improvement** — the route achieves a better average price per share than the best single-venue baseline.
+- **Share improvement** — the route fills more shares than any single venue could supply alone, by combining depth across venues.
 
 ## Inputs
 
@@ -21,6 +26,7 @@ The calculation needs:
 - Reference route.
 - Executed route.
 - Per-leg fills.
+- `singleVenueMaxFillSize` — the maximum shares the best single venue could have filled at quote time.
 - Fee policy version.
 
 ## Reference route
@@ -37,28 +43,60 @@ It should be:
 
 If no reliable reference exists, Lotus should not show a surplus number.
 
-## Buy improvement
+## Price improvement
 
-For buys, improvement is extra shares from the same spend.
+Price improvement measures a better average execution price against the reference.
+
+### Buy price improvement
+
+For buys, improvement is extra shares from the same spend due to a better fill price.
 
 ```text
 Q_ref = N / P_ref
 Q_exec = sum(filled shares)
-Delta_Q = max(0, Q_exec - Q_ref)
-S_gross = Delta_Q * P_exec
+Delta_Q_price = max(0, Q_exec - Q_ref)
+S_price = Delta_Q_price * P_exec
 ```
 
-`S_gross` is a USDC-normalized value so it can be used for fee policy.
+`S_price` is a USDC-normalized value so it can be used for fee policy.
 
-## Sell improvement
+### Sell price improvement
 
-For sells, improvement is extra USDC from the same shares.
+For sells, improvement is extra USDC from the same shares at a better price.
 
 ```text
 USDC_ref = Q * P_ref
 USDC_exec = sum(leg proceeds)
-S_gross = max(0, USDC_exec - USDC_ref)
+S_price = max(0, USDC_exec - USDC_ref)
 ```
+
+## Share improvement
+
+Share improvement measures extra shares obtained exclusively through multi-venue routing — shares that no single venue could have supplied at the time of the quote.
+
+The single-venue baseline is committed at quote time as `singleVenueMaxFillSize`. This value is the maximum fillable quantity from the best single-venue alternative route. It equals `0` when no single venue had any available liquidity.
+
+```text
+extraShares = max(0, Q_exec - singleVenueMaxFillSize)
+```
+
+The USDC value of the extra shares:
+
+```text
+S_share = extraShares * P_exec
+```
+
+A share improvement fee is charged at execution time on `S_share`.
+
+```text
+shareImprovementFee = S_share * shareImprovementShareBps / 10_000
+```
+
+The default capture rate is 40% (`shareImprovementShareBps = 4000`). The user retains 60% of the extra share value plus the full execution outcome on their original fill.
+
+<Note>
+  Share improvement and price improvement are independent. A route can produce one, both, or neither.
+</Note>
 
 ## Route acceptance
 
@@ -95,7 +133,10 @@ Store enough data to reproduce:
 - `referenceRouteId`
 - `referenceAveragePrice`
 - `executedAveragePrice`
+- `singleVenueMaxFillSize`
 - `grossSurplus`
+- `priceImprovementFee`
+- `shareImprovementFee`
 - `feePolicyVersion`
 - `protocolFee`
 - `builderFee`

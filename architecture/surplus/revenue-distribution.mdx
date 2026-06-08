@@ -1,38 +1,49 @@
 ---
 title: "Revenue distribution"
-description: "How realized surplus moves to users, builders, LPs, and Lotus."
+description: "How realized surplus and improvement fees move to users, builders, and Lotus."
 ---
 
-Revenue distribution happens after settlement verification.
+Revenue distribution happens after verified fills.
 
-Lotus should not distribute protocol or builder revenue from an estimated preview. It should use verified fills and the active fee policy.
+Lotus does not distribute protocol or builder revenue from an estimated preview. It uses verified fills and the active fee policy.
 
 ## Distribution order
 
 1. Verify venue fills.
-2. Recalculate realized surplus.
-3. Apply fee caps.
-4. Allocate builder fee, if configured.
-5. Allocate protocol fee.
+2. Recalculate realized price improvement from verified fills.
+3. Apply share improvement fee (charged at execution time, confirmed post-fill).
+4. Apply price improvement fee policy and caps.
+5. Allocate builder fee, if configured.
 6. Leave remaining improvement with the user.
 7. Write ledger entries.
+
+## Fee types in the distribution
+
+| Fee | Source | When settled |
+| --- | --- | --- |
+| Share improvement fee | Extra shares beyond single-venue capacity | At execution |
+| Price improvement fee | Better price versus single-venue baseline | Post settlement verification |
+| Execution fee | Flat bps on filled notional | At execution |
+| Builder fee | Configured share of price improvement | Post settlement verification |
 
 ## Distribution formula
 
 ```text
-S_net_user = S_gross - F_protocol - F_builder - F_lp
+S_net_user = S_price - priceImprovementFee - builderFee
 ```
 
-`F_lp` is optional and applies only if a liquidity partner rebate or fee policy is active.
+The user retains all filled shares, including the extra shares unlocked by multi-venue routing. The share improvement fee is charged on the USDC value of those extra shares — not on the shares themselves.
+
+`F_lp` is optional and applies only if a liquidity partner rebate policy is active.
 
 ## Who receives what
 
 | Recipient | Receives |
 | --- | --- |
-| User | Base execution outcome plus retained surplus. |
-| Builder | Configured builder fee, if eligible. |
-| LP | Configured rebate or fee, if an RFQ policy applies. |
-| Lotus protocol | Protocol surplus fee. |
+| User | All filled shares, plus retained price improvement. |
+| Builder | Configured builder fee on price improvement, if eligible. |
+| Lotus protocol | Price improvement fee, share improvement fee, and execution fee per active policy. |
+| LP | Configured rebate, if an RFQ policy applies. |
 
 ## When revenue is zero
 
@@ -42,17 +53,22 @@ Revenue should be zero when:
 - The route does not improve the baseline.
 - Settlement verification is incomplete.
 - The fee policy does not apply.
-- Fees would make the user worse off.
+- Fees would make the user worse off on price improvement.
+
+Share improvement fees apply independently — if extra shares were filled through multi-venue routing, the fee applies even when there is no price improvement.
 
 ## Accounting entries
 
 Each distribution should produce ledger entries:
 
 - `SURPLUS_REALIZED`
+- `PRICE_IMPROVEMENT_FEE`
+- `SHARE_IMPROVEMENT_FEE` (if applicable)
+- `EXECUTION_FEE`
 - `USER_SURPLUS_RETAINED`
 - `PROTOCOL_FEE`
-- `BUILDER_FEE`
-- `LP_REBATE` or `LP_FEE`, if applicable
+- `BUILDER_FEE` (if applicable)
+- `LP_REBATE` or `LP_FEE` (if applicable)
 
 These entries should reference the same execution ID and fee policy version.
 

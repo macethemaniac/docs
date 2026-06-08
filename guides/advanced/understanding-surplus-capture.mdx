@@ -1,28 +1,46 @@
 ---
 title: "Understanding surplus capture"
-description: "How Lotus accounts for improvement beyond the baseline route."
+description: "How Lotus accounts for price improvement and share improvement beyond the baseline route."
 ---
 
 Surplus is the improvement produced by a Lotus route compared with a reference baseline.
 
-For a trader, surplus is the extra value created by better routing. For builders and liquidity partners, surplus is also the source of transparent fee and revenue policies.
+For a trader, surplus is the extra value created by better routing. Lotus earns by capturing a transparent share of that value — only when execution actually improves the outcome.
 
-## What creates surplus
+Lotus recognizes two distinct types of improvement:
 
-Surplus can come from:
+- **Price improvement** — a better average execution price per share.
+- **Share improvement** — more shares filled than any single venue could supply alone.
+
+## What creates price improvement
+
+Price improvement can come from:
 
 - Better venue depth.
-- Multi-venue splitting.
-- RFQ liquidity.
-- Lower slippage.
-- Better price discovery.
+- Multi-venue splitting that achieves a lower blended average price.
+- RFQ liquidity at better prices.
+- Lower slippage from deeper orderbooks.
 - Faster execution against fresh quotes.
 
-The surplus calculation should be net of relevant fees.
+## What creates share improvement
 
-## The basic formula
+Share improvement comes from **multi-venue routing only**.
 
-Lotus starts with a reference route and compares it with the executed route.
+When a single venue cannot fill the full order size — because its orderbook is too thin — Lotus can combine depth from multiple venues simultaneously. The extra shares filled beyond what any single venue could supply represent share improvement.
+
+This is different from price improvement. A user can receive share improvement on an order even when the blended price is the same as the single-venue price, simply because multi-venue routing made more of the order fillable.
+
+## The single-venue baseline
+
+Both improvement types reference a committed baseline.
+
+For price improvement, the baseline is the best safe single-venue route available at preview time — its average price.
+
+For share improvement, the baseline is `singleVenueMaxFillSize`: the maximum shares the best single venue could fill at quote time. This value is committed when the quote is accepted so it can be independently verified.
+
+If `singleVenueMaxFillSize` equals the full order size, no share improvement applies — a single venue could have filled everything.
+
+## Price improvement formula
 
 For buys:
 
@@ -30,7 +48,7 @@ For buys:
 Q_ref = notional / referenceAveragePrice
 Q_exec = filled shares from Lotus route
 surplusShares = max(0, Q_exec - Q_ref)
-grossSurplus = surplusShares * executedAveragePrice
+grossPriceImprovement = surplusShares * executedAveragePrice
 ```
 
 For sells:
@@ -38,60 +56,67 @@ For sells:
 ```text
 referenceProceeds = shares * referenceAveragePrice
 executedProceeds = proceeds from Lotus route
-grossSurplus = max(0, executedProceeds - referenceProceeds)
+grossPriceImprovement = max(0, executedProceeds - referenceProceeds)
 ```
 
-The fee policy is applied only to positive `grossSurplus`.
+## Share improvement formula
 
-## Baseline route
+```text
+extraShares = max(0, Q_exec - singleVenueMaxFillSize)
+shareImprovementValue = extraShares * executedAveragePrice
+shareImprovementFee = shareImprovementValue * shareImprovementShareBps / 10000
+```
 
-Lotus needs a baseline to measure improvement.
+The user receives all the extra shares. Lotus captures only a configured percentage of their USDC value. The user keeps the rest.
 
-The baseline is usually the best safe single-venue route available for the same market, outcome, side, and amount at preview time.
+## Estimated versus final numbers
 
-If no reliable baseline exists, Lotus should avoid presenting a fake savings number.
+Estimated improvement appears at preview time.
 
-## Estimated versus final surplus
-
-Estimated surplus appears at preview time.
-
-Final surplus is calculated after:
+Final improvement is calculated after:
 
 - Venue submit.
-- Fill confirmation.
+- Fill confirmation with actual execution prices.
 - Settlement verification.
 - Fee accounting.
-- Any fallback route handling.
 
-These numbers can differ because markets move.
+These numbers can differ because markets move between quote and fill.
 
 ## How Lotus makes money
 
-Lotus can capture a configured share of positive surplus.
+Lotus captures a configured share of positive price improvement:
 
 ```text
-protocolFee = min(
-  grossSurplus * protocolShareBps / 10000,
-  notional * maxProtocolFeeBpsOfNotional / 10000
+priceImprovementFee = min(
+  grossPriceImprovement * priceImprovementShareBps / 10000,
+  notional * maxTotalFeeBpsOfNotional / 10000
 )
 ```
 
-If a builder fee is configured, it follows the same pattern:
+Lotus also captures a configured share of share improvement value at execution time:
+
+```text
+shareImprovementFee = shareImprovementValue * shareImprovementShareBps / 10000
+```
+
+If a builder fee is configured, it follows the same pattern on price improvement:
 
 ```text
 builderFee = min(
-  grossSurplus * builderShareBps / 10000,
+  grossPriceImprovement * builderShareBps / 10000,
   notional * maxBuilderFeeBpsOfNotional / 10000
 )
 ```
 
-The user-retained improvement is:
+The user-retained price improvement is:
 
 ```text
-userSurplus = grossSurplus - protocolFee - builderFee
+userRetainedPriceImprovement = grossPriceImprovement - priceImprovementFee - builderFee
 ```
 
-If `userSurplus` is not positive enough under the active policy, Lotus should not present the route as savings.
+If `userRetainedPriceImprovement` is not positive enough under the active policy, Lotus should not present the route as having price savings.
+
+Share improvement fees are charged separately and do not affect the price improvement user-positive check — the user is always better off for receiving extra shares.
 
 ## Receipt fields
 
@@ -99,21 +124,22 @@ The final receipt should include:
 
 - Reference average price.
 - Executed average price.
-- Gross surplus.
-- Protocol fee.
+- Gross price improvement.
+- Price improvement fee.
+- Share improvement — extra shares and fee, if any.
 - Builder fee, if any.
-- User-retained surplus.
+- User-retained price improvement.
 - Fee policy version.
 - Settlement verification result.
 
 ## Common mistakes
 
 - Do not calculate surplus against a stale route.
-- Do not count unreachable liquidity.
-- Do not ignore builder fees.
+- Do not count unreachable liquidity in the reference route.
 - Do not show estimated surplus as final settlement.
-- Do not reward a route that worsens the user's net outcome.
+- Do not reward a route that worsens the user's net price outcome.
+- Do not count share improvement as price improvement — they are different fee types with different timing.
 
 <Note>
-  Surplus capture should align the protocol, builders, and users around better execution.
+  Surplus capture aligns the protocol, builders, and users around better execution. Lotus only earns when execution genuinely improves the outcome.
 </Note>
