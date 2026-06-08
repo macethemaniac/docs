@@ -300,7 +300,6 @@
             "group": "Security Model",
             "icon": "shield",
             "pages": [
-              "security/model/public-disclosure-model",
               "security/model/fail-closed",
               "security/model/replay-protection",
               "security/model/execution-scope-tokens",
