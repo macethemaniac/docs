@@ -1,5 +1,75 @@
 ---
 title: "Mitigations"
+description: "Controls Lotus uses to reduce execution and accounting risk."
 ---
 
-The controls Lotus uses to mitigate known risks: routeability checks, EST scoping, replay protection, fail-closed defaults, and operator pause controls.
+Lotus reduces risk with layered controls.
+
+No single control is enough. Execution safety depends on routeability, authorization, funding, submit, settlement, and accounting checks working together.
+
+## Routeability controls
+
+Lotus checks:
+
+- Shared outcome core.
+- Rule compatibility.
+- Fresh quote availability.
+- Venue market and outcome IDs.
+- Venue capability status.
+- Settlement support.
+
+These checks prevent unsafe venue combinations.
+
+## Authorization controls
+
+Lotus uses:
+
+- Execution scope tokens.
+- Signature request hashes.
+- Single-use order scope.
+- Idempotent place and signature handling.
+- Time-bound approvals.
+
+These controls reduce replay and rerouting risk.
+
+## Execution controls
+
+Lotus enforces:
+
+- Slippage tolerance.
+- Order policy.
+- Venue readiness.
+- Funding readiness.
+- Submit-path support.
+- Fail-closed behavior.
+
+If a route becomes unsafe before submit, Lotus should not execute it.
+
+## Accounting controls
+
+Lotus records:
+
+- Per-leg fills.
+- Settlement verification.
+- Position updates.
+- Balance updates.
+- Surplus and fee calculation versions.
+- Receipt state.
+
+These controls prevent ghost fills, missing positions, and duplicate revenue entries.
+
+## Disclosure controls
+
+Public docs should disclose the controls, not the secrets.
+
+Do not publish:
+
+- Production credentials.
+- Private infrastructure maps.
+- Exact abuse thresholds.
+- Raw provider payloads.
+- Privileged operator commands.
+
+<Warning>
+  Transparency should make the security model understandable, not make production easier to attack.
+</Warning>

@@ -1,5 +1,61 @@
 ---
 title: "Auditability"
+description: "How Lotus makes decisions reproducible without leaking secrets."
 ---
 
-Every routing and execution decision is logged with inputs and outputs sufficient to reproduce the outcome offline.
+Auditability means Lotus can explain why an order was routed, submitted, filled, blocked, or failed.
+
+The goal is reproducibility without secret exposure.
+
+## What should be auditable
+
+Lotus should be able to reconstruct:
+
+- User intent.
+- Route candidates considered.
+- Selected route.
+- Reference route for surplus.
+- Fee policy version.
+- Execution scope.
+- Signature requirement.
+- Venue submit result.
+- Settlement verification result.
+- Final receipt.
+
+## What should be redacted
+
+Audit logs and receipts should not expose:
+
+- API keys.
+- Private keys.
+- HMAC secrets.
+- Raw session tokens.
+- Database URLs.
+- Provider auth headers.
+- Raw signed payloads.
+
+Use IDs, hashes, references, and sanitized summaries instead.
+
+## Public receipts
+
+A user-facing receipt should show enough to verify the outcome:
+
+- Market and outcome.
+- Side and size.
+- Venue legs.
+- Average fill price.
+- Fees and surplus.
+- Settlement status.
+- Final state.
+
+It should not expose internal infrastructure.
+
+## Internal review
+
+Internal audit records can include more operational context, but they still need redaction controls.
+
+Access to internal logs should be limited by role and recorded.
+
+<Warning>
+  Auditability is not an excuse to store secrets in logs.
+</Warning>

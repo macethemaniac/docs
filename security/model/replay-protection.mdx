@@ -1,5 +1,55 @@
 ---
-title: "Replay Protection"
+title: "Replay protection"
+description: "How Lotus prevents duplicate execution from retries and reused approvals."
 ---
 
-Every EST is single-use and time-bound. Replayed or expired ESTs are rejected at the execution layer.
+Replay protection ensures one user intent cannot create duplicate venue submits.
+
+This matters because users may double-click, refresh, retry a request, or resubmit a signature while an order is pending.
+
+## Core controls
+
+Lotus uses:
+
+- Single-use execution scope.
+- Order-level idempotency.
+- Signature request hashes.
+- Short-lived authorization windows.
+- State-machine guards.
+- Duplicate-submit detection.
+- Settlement idempotency.
+
+These controls work together so repeated requests return the current order state instead of creating another venue order.
+
+## Where replay can happen
+
+Replay risk can appear at:
+
+- Preview reuse.
+- Place order requests.
+- Signature submission.
+- Venue relay submit.
+- Webhook delivery.
+- Settlement reconciliation.
+
+Every step should be idempotent.
+
+## Safe public detail
+
+Public docs can describe the replay model and required idempotency behavior.
+
+Public docs should not disclose exact nonce formats, internal idempotency keys, storage names, or anti-abuse thresholds unless they are part of a public API contract.
+
+## Builder guidance
+
+Builders should:
+
+- Send one place request per user click.
+- Treat signing as part of the same Place flow.
+- Reuse the same order ID for retries.
+- Poll or subscribe to status instead of creating a new order.
+- Never ask users to sign the same payload repeatedly.
+
+<Warning>
+  Duplicate prevention must be enforced in the backend. Frontend button disabling is helpful, but not sufficient.
+</Warning>

@@ -1,5 +1,49 @@
 ---
-title: "Fail Closed"
+title: "Fail closed"
+description: "Why Lotus refuses execution when safety cannot be proven."
 ---
 
-When any safety check fails, Lotus cancels the execution rather than executing under uncertainty. See [Fail Closed](/learn/concepts/fail-closed) for the conceptual rationale.
+Lotus fails closed when a route cannot be executed safely.
+
+Failing closed means Lotus returns a blocked, expired, or failed state instead of guessing through uncertainty.
+
+## When Lotus fails closed
+
+Lotus should refuse execution when:
+
+- The quote expired.
+- The route moved outside slippage tolerance.
+- A venue outcome ID or token ID is missing.
+- Funding readiness is blocked.
+- A sellable position cannot be verified.
+- A venue submit path is not supported.
+- A required signature is missing or invalid.
+- Settlement verification cannot be supported.
+- The order is outside the authorized execution scope.
+
+## Why this protects users
+
+Prediction market execution can fail in more ways than price movement.
+
+A route can be unsafe because of rule mismatch, venue setup, stale metadata, missing token IDs, or settlement uncertainty. Lotus should not submit unless the backend can prove the route is fresh and authorized.
+
+## User-facing behavior
+
+Production UI should show simple actions:
+
+- **Place order** when ready.
+- **Sign** when approval is required.
+- **Enable venue** when setup is required.
+- A clear retry or failure message when action is possible.
+
+Raw backend blockers belong in staging, admin, support, or receipts.
+
+## Public disclosure boundary
+
+It is safe to document the fail-closed categories.
+
+It is not safe to publish exact internal thresholds, provider retry rules, or privileged operator recovery commands.
+
+<Note>
+  See [Fail closed](/learn/concepts/fail-closed) for the conceptual model.
+</Note>

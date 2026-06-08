@@ -1,5 +1,63 @@
 ---
-title: "Observability Layer"
+title: "Observability layer"
+description: "How Lotus records execution evidence without leaking secrets."
 ---
 
-Metrics, structured logs, distributed traces, and audit records covering every routing and execution decision.
+The observability layer records enough evidence to debug and audit Lotus behavior.
+
+It should not store or expose secrets.
+
+## What Lotus observes
+
+Lotus records:
+
+- Route decision inputs and outputs.
+- Quote freshness and expiry.
+- Venue readiness summaries.
+- Execution state transitions.
+- Settlement verification results.
+- Funding readiness changes.
+- Surplus and fee calculation versions.
+- Error codes and blocker categories.
+
+These records help operators explain why a route was selected, blocked, filled, or failed.
+
+## What Lotus redacts
+
+Logs and traces should not include:
+
+- API keys.
+- Private keys.
+- HMAC secrets.
+- Raw signed payloads.
+- Database URLs.
+- Provider auth headers.
+- User session tokens.
+- Full wallet secrets or recovery material.
+
+Where possible, logs should store stable references and hashes instead of raw sensitive values.
+
+## Audit records
+
+Audit records should be reproducible.
+
+For an execution, Lotus should be able to reconstruct:
+
+- The route shown to the user.
+- The execution scope.
+- The venue legs used.
+- The verified fills.
+- The final accounting outcome.
+- The fee policy version.
+
+This supports transparency without exposing private infrastructure details.
+
+## Public versus internal observability
+
+Public docs can describe the categories Lotus records.
+
+Internal runbooks can describe where logs live, who can access them, and how operators query them. Those internal details should not be published in public documentation.
+
+<Warning>
+  Observability should help explain execution, not leak credentials or production topology.
+</Warning>

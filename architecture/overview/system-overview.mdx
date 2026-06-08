@@ -1,10 +1,59 @@
 ---
-title: "System Overview"
+title: "System overview"
 description: "High-level architecture of the Lotus stack."
 ---
 
-Lotus is composed of seven layers, each with a single responsibility:
+Lotus is a backend-owned execution layer for prediction markets.
 
-<CardGroup cols={2}>
-        
-</CardGroup>
+The system gives users a simple trading surface while the backend handles market normalization, live pricing, route selection, execution, settlement, and accounting.
+
+## Public architecture boundary
+
+This page describes the responsibilities of each layer.
+
+It intentionally does not publish:
+
+- Private hostnames or IPs.
+- Database connection details.
+- Internal queue names.
+- Provider credentials.
+- Relay keys.
+- Admin-only operating commands.
+
+See [Public disclosure model](/security/model/public-disclosure-model) for the disclosure rules.
+
+## Core layers
+
+| Layer | Responsibility |
+| --- | --- |
+| Canonical layer | Groups venue markets into shared outcomes. |
+| RFQ layer | Lets eligible LPs compete with venue liquidity. |
+| Routing layer | Compares single, pair, tri, and RFQ-backed routes. |
+| Execution layer | Submits the selected route through supported venue paths. |
+| Funding layer | Verifies venue-ready buying power and sellable positions. |
+| Accounting layer | Reconciles fills, positions, balances, surplus, and fees. |
+| Observability layer | Records audit trails, metrics, traces, and incident signals. |
+
+Each layer has a narrow job. That makes the system easier to reason about and safer to audit.
+
+## Request flow
+
+1. A user selects a canonical market and outcome.
+2. Lotus reads live display prices from trusted snapshots.
+3. The user previews an executable route.
+4. The backend checks routeability, funding, signing, and venue readiness.
+5. The user clicks **Place order**.
+6. If required, the user signs inside the same flow.
+7. Lotus submits through the existing venue path.
+8. Settlement verification reconciles fills and positions.
+9. Accounting records surplus, fees, and final state.
+
+## Security posture
+
+Lotus uses a fail-closed model.
+
+If the backend cannot prove a route is fresh, authorized, funded, and settlement-safe, it should not submit the order.
+
+<Note>
+  The public architecture explains trust boundaries and safety controls. It should not become a production infrastructure map.
+</Note>

@@ -1,5 +1,40 @@
 ---
-title: "Settlement Verification"
+title: "Settlement verification"
+description: "How Lotus confirms that execution and accounting match venue reality."
 ---
 
-Post-execution verification confirms every leg settled within the EST's price band and at the planned size. Mismatches trigger fail-closed.
+Settlement verification confirms that a submitted order produced the expected result.
+
+Lotus should not treat a venue submit response as final accounting.
+
+## What Lotus verifies
+
+For each execution, Lotus verifies:
+
+- Venue order ID.
+- Venue status.
+- Filled size.
+- Fill price.
+- Per-leg completion.
+- User position update.
+- Venue balance update.
+- Settlement state.
+- Fee and surplus ledger entries.
+
+For pair and tri routes, every leg must be reconciled.
+
+## Why this matters
+
+A venue can accept an order before Lotus sees the final fill.
+
+Without settlement verification, the UI can show pending while the venue filled, or show filled without updating positions. Lotus uses settlement verification to keep trade history, positions, balances, and revenue accounting consistent.
+
+## Public disclosure boundary
+
+It is safe to publish the verification categories and receipt fields.
+
+It is not safe to publish private provider endpoints, exact internal retry schedules, privileged recovery steps, or raw provider payloads that contain secrets.
+
+<Warning>
+  Verified settlement is required before Lotus recognizes final surplus and protocol revenue.
+</Warning>
