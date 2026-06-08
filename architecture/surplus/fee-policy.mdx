@@ -13,7 +13,7 @@ Lotus captures fees on two distinct improvement types:
 
 | Fee type | Source | Timing |
 | --- | --- | --- |
-| Price improvement fee | Better execution price versus the single-venue baseline | After settlement verification |
+| Price improvement fee | Better execution price versus the single-venue baseline | At execution time |
 | Share improvement fee | Extra shares filled beyond what any single venue could supply | At execution time |
 | Execution fee | Flat fee on filled notional | At execution time |
 | Fast lane fee | Optional fee for prioritized execution | At execution time |
@@ -91,7 +91,7 @@ If this fails, the route should not advertise savings.
 Fee policy should apply only when:
 
 - The order fills.
-- Settlement verification passes (for price improvement fees).
+- Fill is confirmed and execution prices are verified.
 - Realized improvement is positive.
 - The route is eligible under the active policy.
 - The user remains better off after fees.
