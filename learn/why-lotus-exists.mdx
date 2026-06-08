@@ -5,53 +5,22 @@ description: "Prediction market liquidity is fragmented. Lotus unifies it."
 
 Prediction market liquidity is fragmented.
 
-The same real-world event can trade across several venues at the same time. Each venue can have different prices, orderbook depth, wallet requirements, fees, market rules, resolution sources, and settlement timelines.
+The same market may exist across multiple venues with different:
 
-That creates a hard problem for traders and builders.
+- Prices
+- Liquidity
+- Rules
+- Depth
 
-## The user problem
+A trader who wants exposure to a single outcome is forced to compare venues, evaluate rule equivalence, and accept whatever execution a single venue can give them.
 
-A trader who wants exposure to one outcome often has to answer several questions before placing a trade:
-
-- Which venue has the best price?
-- Which venue has enough depth for my size?
-- Are the markets actually the same?
-- Which market resolves from which source?
-- Do I have the right wallet or venue balance?
-- Will the price move before I can submit?
-- Will my position show correctly after the fill?
-
-Most users should not have to solve that manually.
-
-Lotus gives users one canonical market and routes underneath.
-
-## The builder problem
-
-Apps that want to add prediction market trading face the same fragmentation.
-
-Without Lotus, a builder needs to integrate each venue, maintain market mappings, compare rules, handle wallets, manage orderbooks, track execution status, and reconcile positions.
-
-Lotus packages that into an API, routing layer, and execution system.
-
-## The market maker problem
-
-Market makers also face fragmented flow.
-
-They can quote one venue at a time, but user demand is spread across many venues and apps. Lotus creates a structured RFQ path where eligible LPs can receive canonical market demand and compete to improve execution.
+Lotus helps users trade **one canonical market** while routing intelligently underneath.
 
 ## The Lotus thesis
 
 1. Prediction markets will keep multiplying.
 2. Liquidity will stay fragmented.
-3. Users will prefer one market over a venue picker.
-4. Builders will prefer one integration over many venue integrations.
-5. Market makers will prefer structured flow over scattered integrations.
-6. Execution must stay strict, verifiable, and fail-closed.
+3. Users want a single market, not a venue picker.
+4. Routing must be safe, transparent, and verifiable.
 
-## Why this belongs in the execution layer
-
-Aggregation alone is not enough.
-
-A frontend can show many prices, but it cannot safely decide whether two markets are equivalent, whether venue readiness is valid, whether a token ID is executable, or whether a route should be submitted.
-
-Lotus moves that work to the backend. The frontend can stay clean, while execution remains governed by fresh quotes, routeability checks, signer requirements, idempotency, and settlement verification.
+The execution layer is the natural home for this complexity.

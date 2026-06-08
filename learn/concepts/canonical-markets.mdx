@@ -3,54 +3,10 @@ title: "Canonical markets"
 description: "One market across many venues."
 ---
 
-A canonical market is Lotus's normalized representation of the same tradeable outcome across venues.
-
-Users trade the canonical market. Lotus routes to the underlying venues.
-
-## Example
-
-Several venues may list a market like:
-
-> Will BTC reach $150,000 by December 31?
-
-The titles may look similar, but Lotus cannot assume they are the same market. One venue may resolve from a different price source. Another may use a different timestamp. Another may include edge cases that change how the market settles.
-
-Lotus only groups venue markets when the routeable overlap is clear.
-
-## What canonicalization checks
+A **canonical market** is Lotus's normalized representation of an outcome that may exist on multiple venues. Users trade the canonical market; Lotus routes underneath.
 
 Canonicalization combines:
 
-1. [Shared outcome core](/learn/concepts/shared-outcome-core): the outcome that all included venues agree on.
-2. [Rule compatibility](/learn/concepts/rule-compatibility): whether venue resolution rules are equivalent enough to route.
-3. Time alignment: whether the resolution window matches.
-4. Outcome mapping: whether the same outcome can be identified across venues.
-5. Venue metadata quality: whether Lotus has enough trusted venue-sourced data to justify the match.
-
-## What a canonical market contains
-
-A canonical market can include:
-
-- One canonical event.
-- One or more canonical outcomes.
-- One or more venue markets.
-- Venue-specific market IDs and outcome IDs.
-- Resolution rules and source metadata.
-- Display prices from live snapshots.
-- Routeability metadata for execution.
-
-## Visible does not always mean executable
-
-A market can be visible before every venue is executable.
-
-For display, Lotus can show the best trusted live price it has. For execution, Lotus requires stricter checks: fresh quotes, valid venue outcome IDs, venue readiness, user balance, signer readiness, route approval, and settlement safety.
-
-<Note>
-  Display data helps users understand the market. Execution authority comes only from fresh backend quote and readiness checks.
-</Note>
-
-## Why canonical markets matter
-
-Canonical markets let users and builders think in terms of the outcome they want, not the venue that happens to list it.
-
-They also give Lotus the structure needed to compare prices, build pair and tri routes, send RFQs, and reconcile positions after execution.
+1. [Shared Outcome Core](/learn/concepts/shared-outcome-core) — the underlying question and outcome space.
+2. [Rule Compatibility](/learn/concepts/rule-compatibility) — equivalence of resolution rules.
+3. **Time alignment** — overlap in resolution windows.
