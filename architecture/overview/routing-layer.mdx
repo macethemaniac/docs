@@ -1,5 +1,56 @@
 ---
-title: "Routing Layer"
+title: "Routing layer"
+description: "How Lotus chooses the best safe execution path."
 ---
 
-Enumerates candidate routes, applies routeability checks, scores survivors, and binds the winning route to an EST.
+The routing layer chooses the best safe route for a user intent.
+
+It compares venue books, RFQ quotes, fees, slippage, depth, funding readiness, and settlement support. The selected route is then bound to execution scope.
+
+## Inputs
+
+The routing layer consumes:
+
+- Canonical market and outcome.
+- User side and amount.
+- Venue preference.
+- Order policy.
+- Slippage tolerance.
+- Venue orderbook snapshots.
+- RFQ quotes.
+- Funding and position readiness.
+- Venue capability status.
+
+## Candidate routes
+
+Lotus can consider:
+
+- `SINGLE`: one venue.
+- `PAIR`: two venues.
+- `TRI`: three venues.
+- RFQ-backed routes.
+- Fallback candidates.
+
+More venues are not automatically better. Each added leg must improve the user outcome enough to justify extra execution complexity.
+
+## Selection rule
+
+The best route is the route with the strongest executable user outcome after fees, expected slippage, and risk.
+
+If two routes are very close, Lotus should prefer the simpler route.
+
+## Output
+
+The routing layer outputs:
+
+- Selected route.
+- Route type.
+- Per-leg venue allocation.
+- Expected average price.
+- Savings estimate.
+- Required actions.
+- Execution scope inputs.
+
+<Warning>
+  Routing can display a good candidate, but execution must still revalidate freshness and readiness before submit.
+</Warning>

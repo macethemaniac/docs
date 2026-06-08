@@ -1,5 +1,43 @@
 ---
-title: "Fallback Planning"
+title: "Fallback planning"
+description: "How Lotus handles route recovery safely."
 ---
 
-For each selected route, Lotus pre-declares fallback paths bound by the same EST. Fallbacks fire when a leg fails to fill and the alternative remains routeable.
+Fallback planning defines what Lotus may do if a selected route becomes unsafe before or during execution.
+
+A fallback must be scoped and safe. It is not permission to invent a new route after the user approved a different one.
+
+## When fallbacks help
+
+Fallbacks can help when:
+
+- A venue quote expires.
+- A route leg moves outside tolerance.
+- A multi-leg route can safely reduce to fewer legs.
+- A venue temporarily rejects a leg.
+- A simpler route remains executable.
+
+## Fallback limits
+
+A fallback must respect:
+
+- The same canonical market and outcome.
+- The user's side and amount.
+- The approved slippage tolerance.
+- The approved venue preference.
+- Funding and position readiness.
+- Settlement safety.
+
+If these cannot be proven, Lotus should fail closed.
+
+## User experience
+
+Users should see one order lifecycle.
+
+If a fallback is used, the receipt should explain the route actually executed and why it differed from the preview.
+
+## Examples
+
+A tri route can fall back to a pair route if the third leg becomes unsafe and the pair still improves the user outcome.
+
+A venue-specific order should not fall back to another venue unless the user explicitly selected `BEST_ROUTE`.

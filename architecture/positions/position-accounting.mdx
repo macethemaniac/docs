@@ -1,5 +1,37 @@
 ---
-title: "Position Accounting"
+title: "Position accounting"
+description: "How Lotus keeps portfolio state consistent after execution."
 ---
 
-Reconciles canonical positions against venue-side state. Discrepancies raise alerts and pause routing for the affected canonical market.
+Position accounting reconciles venue fills into canonical portfolio state.
+
+It makes sure the user's trade history, positions, balances, and performance views agree with verified venue results.
+
+## Accounting flow
+
+1. Venue reports a fill or status update.
+2. Lotus verifies the fill against the execution route.
+3. Venue position records are updated.
+4. The unified position is recalculated.
+5. Portfolio value and performance are updated.
+6. The execution receipt is finalized.
+
+## What can go wrong
+
+Position accounting protects against:
+
+- Venue fills that remain pending in Lotus.
+- Fills that update history but not positions.
+- Positions marked from stale or unavailable data.
+- Duplicate fills from repeated events.
+- Sellable amount mismatches.
+
+## Marking positions
+
+Position marks are display values.
+
+They help users understand current value, but they should not authorize execution. Sell execution still needs fresh route and position checks.
+
+<Note>
+  Portfolio display can use marks, but trade execution uses verified venue readiness.
+</Note>

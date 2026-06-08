@@ -1,5 +1,37 @@
 ---
-title: "Unified Positions"
+title: "Unified positions"
+description: "How Lotus presents one position across many venues."
 ---
 
-Lotus collapses venue-level positions into a single canonical position per market. Users see net exposure; Lotus tracks per-venue allocation underneath.
+Unified positions let users see one canonical position even when fills happen across multiple venues.
+
+The user thinks in terms of market and outcome. Lotus tracks the venue-level allocation underneath.
+
+## What a unified position includes
+
+A unified position can include:
+
+- Canonical market.
+- Canonical outcome.
+- Total shares.
+- Average entry.
+- Current mark.
+- Venue allocation.
+- Sellable amount.
+- Settlement status.
+
+## Why it matters
+
+Without unified positions, users need to track every venue separately.
+
+Lotus can show one portfolio view while still preserving venue-level data for execution, settlement, and withdrawals.
+
+## Sell routing
+
+For sells, Lotus must prove the user has sellable shares on the venue or route leg being used.
+
+The unified position is useful for display, but execution needs verified venue position data.
+
+<Warning>
+  A unified position is not a shortcut around venue-level sell checks.
+</Warning>

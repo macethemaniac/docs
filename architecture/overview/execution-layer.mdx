@@ -1,5 +1,51 @@
 ---
-title: "Execution Layer"
+title: "Execution layer"
+description: "How Lotus turns a selected route into a submitted order."
 ---
 
-Takes a bound EST and executes the route across venues, coordinating leg ordering, partial fills, and fallback handling.
+The execution layer owns the backend order state machine.
+
+It takes a selected route, validates it, collects signatures when required, submits through the supported venue path, and moves the order toward settlement verification.
+
+## Responsibilities
+
+The execution layer handles:
+
+- Previewing executable orders.
+- Revalidating route freshness.
+- Preparing required signature requests.
+- Enforcing idempotency.
+- Submitting venue orders.
+- Returning status updates.
+- Coordinating fallback behavior when allowed.
+
+## Order flow
+
+1. User previews a route.
+2. Lotus returns the current executable state.
+3. User clicks **Place order**.
+4. Lotus revalidates quote, readiness, and venue capability.
+5. If needed, the user signs in the same flow.
+6. Lotus submits automatically after approval.
+7. Status moves to submitted, filled, failed, or verification pending.
+
+## Safety gates
+
+Before submit, Lotus checks:
+
+- Quote freshness.
+- Slippage tolerance.
+- Venue readiness.
+- Funding or sellable position.
+- Signer readiness.
+- Venue submit support.
+- Execution scope.
+- Replay protection.
+
+If any required gate fails, Lotus should not submit.
+
+## Receipt boundary
+
+Execution produces submit evidence.
+
+Final user accounting still depends on settlement verification.

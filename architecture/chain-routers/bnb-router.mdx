@@ -1,5 +1,29 @@
 ---
-title: "BNB Router"
+title: "BNB router"
+description: "How Lotus handles BNB-anchored execution paths."
 ---
 
-The BNB chain router handles execution and funding on BNB-anchored venues.
+The BNB router handles execution and funding flows for venues that use BNB-compatible rails.
+
+It keeps chain-specific readiness checks separate from the user-facing trading experience.
+
+## Responsibilities
+
+The BNB router can handle:
+
+- Venue-ready balance checks.
+- Venue activation status.
+- Order submit compatibility.
+- Position reads.
+- Settlement verification inputs.
+- Withdrawal readiness.
+
+## User-facing result
+
+Users should see clear route and funding states, not chain-specific implementation details.
+
+When a venue path is ready, Lotus can include it in routing. When it is not ready, Lotus should return a clear setup or blocked state.
+
+## Safety model
+
+The router should fail closed if the chain path cannot support a safe submit and verified settlement result.

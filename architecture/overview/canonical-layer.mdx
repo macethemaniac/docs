@@ -1,5 +1,50 @@
 ---
-title: "Canonical Layer"
+title: "Canonical layer"
+description: "How Lotus turns venue markets into shared outcomes."
 ---
 
-Owns market discovery, ingestion, and canonicalization. Produces canonical markets consumed by the routing layer.
+The canonical layer is the normalization layer for Lotus.
+
+It reads venue market metadata and turns compatible venue markets into canonical markets and outcomes. The routing layer depends on this output before it can compare prices across venues.
+
+## Responsibilities
+
+The canonical layer handles:
+
+- Market discovery from supported venues.
+- Venue rule and resolution metadata.
+- Outcome normalization.
+- Venue market and outcome identifiers.
+- Shared outcome core detection.
+- Rule compatibility classification.
+- Display metadata for market cards and details.
+
+## Why it exists
+
+Prediction market titles are not enough to route safely.
+
+Two venues can list similar markets while using different resolution sources, cutoff times, edge cases, or outcome definitions. The canonical layer prevents Lotus from routing across markets that only look similar.
+
+## Output
+
+The layer produces:
+
+- Canonical event IDs.
+- Canonical market IDs.
+- Canonical outcome IDs.
+- Venue mappings.
+- Resolution metadata.
+- Compatibility status.
+- Display-safe market metadata.
+
+These objects are used by routing, charts, orderbooks, receipts, and position accounting.
+
+## Execution boundary
+
+Canonical data helps Lotus understand what a market is.
+
+It does not authorize execution by itself. Execution still requires fresh quotes, funding readiness, signer readiness, venue capability checks, and settlement support.
+
+<Note>
+  Canonicalization is the foundation for cross-venue routing, but it is not a substitute for live execution checks.
+</Note>

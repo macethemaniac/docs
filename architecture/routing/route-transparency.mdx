@@ -1,5 +1,47 @@
 ---
-title: "Route Transparency"
+title: "Route transparency"
+description: "How Lotus makes routing decisions understandable."
 ---
 
-Every routing decision logs the inputs and scoring used so users can reproduce the selection. Route details and execution receipts surface this data downstream.
+Route transparency lets users and builders understand why Lotus selected a route.
+
+The normal UI should stay simple. Advanced route details and receipts can show the evidence behind the decision.
+
+## What route details should show
+
+Route details can include:
+
+- Selected route type.
+- Eligible venues.
+- Per-leg allocation.
+- Expected average price.
+- Reference route.
+- Estimated savings.
+- Fee impact.
+- Slippage tolerance.
+- Required actions.
+- Readiness summary.
+
+## What receipts should show
+
+Receipts should show what actually happened:
+
+- Executed venue legs.
+- Filled size.
+- Fill price.
+- Final average price.
+- Final fees.
+- Realized surplus.
+- Settlement verification result.
+
+## Why transparency matters
+
+Lotus can route across several venues and liquidity sources.
+
+Without route transparency, a user cannot tell whether the route improved the outcome or merely added complexity. The receipt should make the final result auditable.
+
+## Display versus execution
+
+Display prices can be fast and smooth.
+
+Execution routes require stricter evidence. Route transparency should preserve this distinction so users understand why a market can show a price while an order still requires fresh validation.

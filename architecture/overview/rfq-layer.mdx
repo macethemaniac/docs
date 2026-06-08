@@ -1,5 +1,49 @@
 ---
-title: "RFQ Layer"
+title: "RFQ layer"
+description: "How Lotus brings market maker liquidity into routing."
 ---
 
-Connects to LPs, issues RFQs, evaluates responses, and surfaces eligible quotes to the routing layer.
+The RFQ layer lets eligible liquidity providers compete with venue orderbooks.
+
+It gives Lotus another source of executable liquidity when public orderbooks are thin, fragmented, or expensive for the requested size.
+
+## Responsibilities
+
+The RFQ layer handles:
+
+- Creating RFQ sessions for eligible user intent.
+- Receiving authenticated LP quotes.
+- Checking quote freshness and expiry.
+- Validating size, price, and fee fields.
+- Comparing LP quotes with venue routes.
+- Passing eligible quotes to the routing layer.
+
+## How it fits routing
+
+RFQ quotes are candidates.
+
+They compete with:
+
+- Single-venue routes.
+- Pair routes.
+- Tri routes.
+- Fallback candidates.
+
+The router should select an RFQ-backed route only when it improves the executable user outcome and passes the same safety checks as venue liquidity.
+
+## Safety rules
+
+An RFQ quote must not bypass:
+
+- Shared outcome core checks.
+- Rule compatibility.
+- Quote expiry.
+- User slippage tolerance.
+- Execution scope.
+- Settlement verification.
+
+## User experience
+
+Users should not need to understand whether the winning route used an LP quote, a venue book, or both.
+
+The preview and receipt should show the route summary and final execution result clearly.

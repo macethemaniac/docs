@@ -1,5 +1,42 @@
 ---
-title: "Funding Layer"
+title: "Funding layer"
+description: "How Lotus verifies venue-ready buying power and sellable positions."
 ---
 
-Tracks user balances, manages venue-level funding intents, and verifies funding readiness before execution.
+The funding layer checks whether a route can be backed by the user's cash or positions.
+
+It separates account balances from venue-ready balances. A user can have funds visible in Lotus while a specific venue still requires activation or readiness confirmation.
+
+## Responsibilities
+
+The funding layer tracks:
+
+- Funding wallet balances.
+- Venue cash readiness.
+- Venue activation status.
+- Sellable position size.
+- In-flight order reservations.
+- Withdrawal availability.
+- Funding and withdrawal history.
+
+## Buy readiness
+
+For buys, Lotus checks whether each route leg has enough venue-ready cash or approved buying power.
+
+For pair and tri routes, every venue leg must pass readiness.
+
+## Sell readiness
+
+For sells, Lotus checks whether the user has verified sellable shares for the selected outcome and venue route.
+
+This includes the executable venue token or outcome identifier needed to build the sell order.
+
+## Why this matters
+
+Funding readiness prevents Lotus from showing a route as executable when the user cannot actually submit it.
+
+It also protects users from placing orders that would fail after signing because a venue was not ready.
+
+<Note>
+  Funding readiness is rechecked before submit because balances and venue state can change.
+</Note>

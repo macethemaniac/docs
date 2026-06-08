@@ -1,5 +1,53 @@
 ---
-title: "Route Discovery"
+title: "Route discovery"
+description: "How Lotus finds candidate routes before scoring them."
 ---
 
-Enumerates single-venue, pair, and tri route candidates from canonical market state, live venue quotes, and eligible LP RFQs.
+Route discovery builds the candidate set for a user intent.
+
+It does not choose the winning route. It enumerates the possible safe shapes that the optimization step can compare.
+
+## Inputs
+
+Route discovery uses:
+
+- Canonical market and outcome.
+- Side and amount.
+- Venue preference.
+- Available venue mappings.
+- Live venue price snapshots.
+- Venue depth.
+- RFQ quote candidates.
+- Funding and position readiness.
+
+## Candidate shapes
+
+Lotus can discover:
+
+- Single-venue routes.
+- Pair routes.
+- Tri routes.
+- RFQ-backed routes.
+- Fallback candidates.
+
+Every candidate must stay inside the shared outcome core.
+
+## Venue preference
+
+`BEST_ROUTE` lets Lotus discover all eligible venues.
+
+A venue-specific preference should stay on that venue. If the requested venue is unavailable, Lotus should return unavailable instead of silently routing somewhere else.
+
+## Discovery output
+
+Each candidate includes:
+
+- Route type.
+- Venue legs.
+- Side and amount per leg.
+- Expected price.
+- Available size.
+- Readiness summary.
+- Any safety blocker.
+
+The next step is route optimization.

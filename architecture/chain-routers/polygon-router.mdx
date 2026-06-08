@@ -1,5 +1,36 @@
 ---
-title: "Polygon Router"
+title: "Polygon router"
+description: "How Lotus handles Polygon-anchored execution paths."
 ---
 
-The Polygon chain router handles execution and funding on venues anchored to Polygon. Tuned for low fees and high transaction throughput.
+The Polygon router handles execution and funding flows for venues that settle or operate through Polygon-compatible rails.
+
+It abstracts chain-specific details away from the user-facing trade flow.
+
+## Responsibilities
+
+The Polygon router can handle:
+
+- Venue-ready balance checks.
+- Token allowance or approval status.
+- Venue submit requirements.
+- Settlement status reads.
+- Position and balance reconciliation.
+- Withdrawal readiness.
+
+## User experience
+
+Users should not need to think about chain routing during a normal trade.
+
+They should see:
+
+- Whether the venue is ready.
+- Whether activation is needed.
+- Whether the order can be placed.
+- Whether the order filled.
+
+## Execution boundary
+
+The Polygon router does not choose the trade route.
+
+The routing layer selects the route. The chain router makes the selected venue path executable and verifiable.

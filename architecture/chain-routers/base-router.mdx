@@ -1,5 +1,29 @@
 ---
-title: "Base Router"
+title: "Base router"
+description: "How Lotus handles Base-anchored execution paths."
 ---
 
-The Base chain router handles execution and funding on Base-anchored venues.
+The Base router handles execution and funding flows for venues that use Base-compatible rails.
+
+It follows the same product contract as other chain routers: keep the user flow simple while enforcing venue readiness and settlement checks.
+
+## Responsibilities
+
+The Base router can handle:
+
+- Funding readiness checks.
+- Venue-specific activation requirements.
+- Submit path compatibility.
+- Balance and position reads.
+- Settlement verification inputs.
+- Withdrawal readiness.
+
+## Routing relationship
+
+The Base router is not a smart-routing engine.
+
+It receives a selected route leg and helps Lotus determine whether that leg can be executed and reconciled through the required chain path.
+
+## Safety model
+
+If readiness or settlement support cannot be proven, Lotus should not submit through that venue path.

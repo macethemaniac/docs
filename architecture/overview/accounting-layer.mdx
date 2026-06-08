@@ -1,5 +1,53 @@
 ---
-title: "Accounting Layer"
+title: "Accounting layer"
+description: "How Lotus records fills, positions, surplus, and fees."
 ---
 
-System of record for executions, positions, surplus, and protocol monetization.
+The accounting layer is the system of record for executed trades.
+
+It reconciles venue fills into user positions, balances, receipts, surplus, and fee entries.
+
+## Responsibilities
+
+The accounting layer records:
+
+- Trade fills.
+- Per-leg venue results.
+- Settlement verification status.
+- Position updates.
+- Balance updates.
+- Surplus calculations.
+- Protocol and builder fees.
+- Final execution receipts.
+
+## Why it is separate
+
+Execution asks venues to fill an order.
+
+Accounting verifies what happened and records the final result.
+
+This separation protects users when a venue fill arrives late, a route partially fills, or a status update changes after the first submit response.
+
+## Revenue boundary
+
+Lotus should recognize surplus and protocol revenue only after:
+
+1. The order fills.
+2. Settlement verification passes.
+3. Realized surplus is positive.
+4. The fee policy applies.
+5. The user remains better off after fees.
+
+## User-facing output
+
+The accounting layer powers:
+
+- Trade history.
+- Portfolio positions.
+- Funding history.
+- Execution receipts.
+- PnL and performance views.
+
+<Warning>
+  Accounting should be derived from verified execution and settlement data, not from frontend state.
+</Warning>

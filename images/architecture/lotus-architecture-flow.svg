@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="520" viewBox="0 0 1100 520" role="img" aria-labelledby="title desc">
+  <title id="title">Lotus architecture flow</title>
+  <desc id="desc">A product-level diagram showing Lotus layers from venue data to routing, execution, settlement, and accounting.</desc>
+  <rect width="1100" height="520" rx="24" fill="#080A0D"/>
+  <rect x="30" y="32" width="1040" height="456" rx="20" fill="#111318" stroke="#2A2F3A"/>
+  <text x="56" y="78" fill="#F7F9FC" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="700">Lotus architecture</text>
+  <text x="56" y="108" fill="#9BA3B4" font-family="Inter, Arial, sans-serif" font-size="15">Product-level flow from market data to verified user accounting</text>
+
+  <g font-family="Inter, Arial, sans-serif" font-size="14">
+    <rect x="58" y="156" width="160" height="84" rx="14" fill="#141922" stroke="#405069"/>
+    <text x="84" y="191" fill="#F7F9FC" font-weight="700">Venue data</text>
+    <text x="84" y="216" fill="#9BA3B4">Markets, rules, books</text>
+
+    <rect x="262" y="156" width="160" height="84" rx="14" fill="#162116" stroke="#5A7825"/>
+    <text x="292" y="191" fill="#F7F9FC" font-weight="700">Canonical layer</text>
+    <text x="289" y="216" fill="#BEEB7A">Shared outcomes</text>
+
+    <rect x="466" y="156" width="160" height="84" rx="14" fill="#171C28" stroke="#4B5E88"/>
+    <text x="510" y="191" fill="#F7F9FC" font-weight="700">Routing</text>
+    <text x="497" y="216" fill="#9BA3B4">Single, pair, tri, RFQ</text>
+
+    <rect x="670" y="156" width="160" height="84" rx="14" fill="#201A12" stroke="#856226"/>
+    <text x="712" y="191" fill="#F7F9FC" font-weight="700">Execution</text>
+    <text x="705" y="216" fill="#D9B36C">Scoped submit</text>
+
+    <rect x="874" y="156" width="160" height="84" rx="14" fill="#162018" stroke="#2E7D50"/>
+    <text x="904" y="191" fill="#F7F9FC" font-weight="700">Settlement</text>
+    <text x="901" y="216" fill="#84D6A0">Verify venue result</text>
+
+    <rect x="262" y="316" width="160" height="84" rx="14" fill="#181A23" stroke="#404860"/>
+    <text x="302" y="351" fill="#F7F9FC" font-weight="700">Funding</text>
+    <text x="291" y="376" fill="#9BA3B4">Ready cash, sells</text>
+
+    <rect x="466" y="316" width="160" height="84" rx="14" fill="#181A23" stroke="#404860"/>
+    <text x="511" y="351" fill="#F7F9FC" font-weight="700">Positions</text>
+    <text x="493" y="376" fill="#9BA3B4">Canonical exposure</text>
+
+    <rect x="670" y="316" width="160" height="84" rx="14" fill="#181A23" stroke="#404860"/>
+    <text x="710" y="351" fill="#F7F9FC" font-weight="700">Accounting</text>
+    <text x="704" y="376" fill="#9BA3B4">Receipts, fees, PnL</text>
+
+    <rect x="874" y="316" width="160" height="84" rx="14" fill="#181A23" stroke="#404860"/>
+    <text x="900" y="351" fill="#F7F9FC" font-weight="700">Observability</text>
+    <text x="905" y="376" fill="#9BA3B4">Auditable evidence</text>
+  </g>
+
+  <g stroke="#CCFF00" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M220 198 H258"/>
+    <path d="M424 198 H462"/>
+    <path d="M628 198 H666"/>
+    <path d="M832 198 H870"/>
+    <path d="M546 242 V310"/>
+    <path d="M750 242 V310"/>
+    <path d="M954 242 V310"/>
+    <path d="M424 358 H462"/>
+    <path d="M628 358 H666"/>
+    <path d="M832 358 H870"/>
+  </g>
+
+  <g fill="#CCFF00">
+    <path d="M258 198 l-9 -6 v12z"/>
+    <path d="M462 198 l-9 -6 v12z"/>
+    <path d="M666 198 l-9 -6 v12z"/>
+    <path d="M870 198 l-9 -6 v12z"/>
+    <path d="M546 310 l-6 -9 h12z"/>
+    <path d="M750 310 l-6 -9 h12z"/>
+    <path d="M954 310 l-6 -9 h12z"/>
+    <path d="M462 358 l-9 -6 v12z"/>
+    <path d="M666 358 l-9 -6 v12z"/>
+    <path d="M870 358 l-9 -6 v12z"/>
+  </g>
+</svg>
