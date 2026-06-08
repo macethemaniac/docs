@@ -32,22 +32,21 @@ Funds should not be withdrawable when they are:
 - Locked by a venue readiness step.
 - Already part of an in-flight withdrawal.
 
-## Public disclosure boundary
+## What readers should know
 
-Safe to disclose:
+Users and builders should understand:
 
 - Balance categories.
 - Readiness state categories.
 - User-facing funding flow.
-- High-level withdrawal safety rules.
+- Withdrawal safety rules.
 
-Do not disclose:
+Funding pages and receipts should not expose:
 
 - Private wallet keys.
-- Internal signer setup.
 - Raw funding provider credentials.
-- Privileged operator recovery commands.
-- Exact internal wallet topology.
+- Wallet recovery material.
+- Raw signed payloads.
 
 <Note>
   Funding readiness is an execution gate. Display balances are not execution authority.

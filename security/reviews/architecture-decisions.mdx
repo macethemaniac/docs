@@ -5,7 +5,7 @@ description: "Security-driven decisions in the Lotus architecture."
 
 Lotus uses a few core architecture decisions to keep execution safe.
 
-This page documents the decisions at a public level. It avoids deployment details that belong in private runbooks.
+This page explains the decisions users and builders should understand.
 
 ## Backend-owned execution
 
@@ -37,8 +37,6 @@ Settlement verification is separate from venue submit.
 
 Reason: the app should not treat a venue acknowledgement as final position accounting.
 
-## Public disclosure boundary
+## Reader takeaway
 
-The decisions above are safe to publish.
-
-The exact implementation details for infrastructure, privileged access, secrets, and recovery operations should remain internal.
+Lotus keeps the user flow simple by moving safety-critical work into backend systems that can revalidate, submit, verify, and reconcile execution.

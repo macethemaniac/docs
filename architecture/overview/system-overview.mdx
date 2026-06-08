@@ -7,20 +7,11 @@ Lotus is a backend-owned execution layer for prediction markets.
 
 The system gives users a simple trading surface while the backend handles market normalization, live pricing, route selection, execution, settlement, and accounting.
 
-## Public architecture boundary
+## Architecture boundary
 
-This page describes the responsibilities of each layer.
+This page describes the responsibilities of each layer at the product level.
 
-It intentionally does not publish:
-
-- Private hostnames or IPs.
-- Database connection details.
-- Internal queue names.
-- Provider credentials.
-- Relay keys.
-- Admin-only operating commands.
-
-Architecture docs should explain trust boundaries and safety controls without becoming an infrastructure map.
+It focuses on what each layer does for users, builders, and liquidity partners. Readers do not need deployment details to understand how Lotus works.
 
 ## Core layers
 
@@ -55,5 +46,5 @@ Lotus uses a fail-closed model.
 If the backend cannot prove a route is fresh, authorized, funded, and settlement-safe, it should not submit the order.
 
 <Note>
-  The public architecture explains trust boundaries and safety controls. It should not become a production infrastructure map.
+  The architecture section explains trust boundaries and safety controls at the product level.
 </Note>

@@ -31,20 +31,16 @@ ESTs reduce the gap between quote and execution.
 
 They prevent the backend from using a signature for a route the user did not approve. They also make retries safer because the backend can return the current order state when the same scoped intent appears again.
 
-## Public disclosure boundary
+## What readers should know
 
-Safe to disclose:
+The important user-facing rule is simple:
 
-- What an EST binds.
-- Why ESTs are single-use.
-- Which states require a signature.
-- How the user flow should feel.
+An EST narrows what Lotus can do after approval. It binds execution to the route and conditions the user approved.
 
-Do not disclose:
+Receipts and docs should not expose:
 
 - Raw EST signing secrets.
 - Private token construction material.
-- Internal key rotation details.
 - Raw signed payloads.
 
 <Note>

@@ -1,6 +1,6 @@
 ---
 title: "Understanding risk states"
-description: "How Lotus explains route safety without exposing internals."
+description: "How Lotus explains whether a route can be executed safely."
 ---
 
 Risk states explain whether a route can be executed safely.
@@ -19,11 +19,11 @@ The normal trading UI should stay simple:
 - **Filled** when the order completes.
 - A clear failure message when user action is needed.
 
-Production users should not see raw blocker labels, cache misses, or internal readiness codes.
+The user-facing interface should not show technical labels, cache misses, or low-level readiness codes.
 
-## Internal route states
+## Detailed route states
 
-Lotus can still track detailed route states internally.
+Lotus can track detailed route states to explain why an order can or cannot proceed.
 
 Examples include:
 
@@ -35,11 +35,11 @@ Examples include:
 - Venue orderbook moved.
 - Settlement verification pending.
 
-These details are useful for support, staging, and admin views.
+These details are most useful in receipts, advanced route views, and troubleshooting flows.
 
-## Why Lotus hides raw blockers
+## Why Lotus simplifies route labels
 
-Raw blockers are often implementation details.
+Technical route labels are often implementation details.
 
 For example, a user does not need to know whether a quote snapshot cache missed. They need to know whether the order can be placed now, whether they must enable a venue, or whether Lotus is still updating prices.
 

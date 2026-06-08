@@ -29,11 +29,9 @@ A venue can accept an order before Lotus sees the final fill.
 
 Without settlement verification, the UI can show pending while the venue filled, or show filled without updating positions. Lotus uses settlement verification to keep trade history, positions, balances, and revenue accounting consistent.
 
-## Public disclosure boundary
+## What readers should know
 
-It is safe to publish the verification categories and receipt fields.
-
-It is not safe to publish private provider endpoints, exact internal retry schedules, privileged recovery steps, or raw provider payloads that contain secrets.
+The receipt should show the verification result and the facts needed to understand it. It should not expose raw provider payloads, credentials, or signed payload material.
 
 <Warning>
   Verified settlement is required before Lotus recognizes final surplus and protocol revenue.

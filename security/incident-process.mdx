@@ -5,7 +5,7 @@ description: "How Lotus responds to security and execution incidents."
 
 Lotus treats security incidents, execution mismatches, and settlement anomalies as production safety events.
 
-This public process explains the phases without exposing private runbooks or privileged commands.
+This process explains how Lotus protects users when something goes wrong.
 
 ## Incident phases
 
@@ -14,7 +14,7 @@ This public process explains the phases without exposing private runbooks or pri
     Lotus monitors execution state, settlement verification, funding readiness, error rates, and venue health signals.
   </Step>
   <Step title="Triage">
-    Operators classify severity, affected users, affected venues, and whether execution should be paused or limited.
+    Lotus classifies severity, affected users, affected venues, and whether execution should be paused or limited.
   </Step>
   <Step title="Contain">
     Lotus can fail closed, pause affected routes, disable unsafe venues, or restrict specific execution paths.
@@ -41,13 +41,13 @@ Public updates should include:
 - Mitigation taken.
 - Follow-up action.
 
-Public updates should not include:
+User-facing updates should not include:
 
-- Secrets.
-- Private infrastructure details.
+- Credentials.
+- Sensitive infrastructure details.
 - Exploit payloads.
-- Privileged recovery commands.
-- Internal detection thresholds.
+- Raw signed payloads.
+- Detection thresholds that could be abused.
 
 ## User protection
 

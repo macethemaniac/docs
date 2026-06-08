@@ -58,18 +58,18 @@ Lotus records:
 
 These controls prevent ghost fills, missing positions, and duplicate revenue entries.
 
-## Disclosure controls
+## Information safety
 
-Public docs should disclose the controls, not the secrets.
+Lotus should explain controls without exposing sensitive material.
 
-Do not publish:
+User-facing docs, receipts, and logs should not expose:
 
 - Production credentials.
-- Private infrastructure maps.
-- Exact abuse thresholds.
+- Provider credentials.
+- Raw signed payloads.
 - Raw provider payloads.
-- Privileged operator commands.
+- Session tokens.
 
 <Warning>
-  Transparency should make the security model understandable, not make production easier to attack.
+  Transparency should make the security model understandable without exposing sensitive execution material.
 </Warning>

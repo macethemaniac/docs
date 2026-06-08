@@ -5,7 +5,7 @@ description: "Risk categories Lotus tracks publicly."
 
 Lotus depends on multiple venues, market data sources, wallets, and execution paths.
 
-This page lists risk categories at a public level. It does not publish exploit playbooks, private thresholds, or internal incident runbooks.
+This page explains the main risk categories that can affect users and builders.
 
 ## Venue dependency
 
@@ -43,12 +43,12 @@ Visible balances can differ from venue-ready balances.
 
 Mitigation: funding readiness checks, activation state tracking, in-flight reservations, and withdrawal safety rules.
 
-## Operational security
+## Information safety
 
-Public documentation itself can leak sensitive details if it includes secrets, exact infrastructure maps, or privileged procedures.
+Documentation and receipts can leak sensitive details if they include credentials, raw signed payloads, or unnecessary provider data.
 
-Mitigation: redaction rules, careful docs review, and a strict split between public architecture concepts and private operational runbooks.
+Mitigation: redact sensitive values, use placeholders in examples, and keep receipts focused on the execution facts users need.
 
 <Note>
-  Known risks are documented so builders understand the trust model, not so attackers receive operational details.
+  Known risks help readers understand the trust model and the controls Lotus uses to reduce risk.
 </Note>

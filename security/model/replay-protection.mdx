@@ -34,11 +34,9 @@ Replay risk can appear at:
 
 Every step should be idempotent.
 
-## Safe public detail
+## What readers should know
 
-Public docs can describe the replay model and required idempotency behavior.
-
-Public docs should not disclose exact nonce formats, internal idempotency keys, storage names, or anti-abuse thresholds unless they are part of a public API contract.
+Lotus should return the current order state when the same scoped intent is retried. This protects users from duplicate venue submits without requiring them to understand the underlying storage or nonce design.
 
 ## Builder guidance
 

@@ -147,8 +147,7 @@
               "integrate/api-reference/execution",
               "integrate/api-reference/position",
               "integrate/api-reference/funding",
-              "integrate/api-reference/withdrawal",
-              "integrate/api-reference/admin"
+              "integrate/api-reference/withdrawal"
             ]
           },
           {
@@ -325,11 +324,6 @@
             ]
           }
         ]
-      },
-      {
-        "tab": "Admin",
-        "hidden": false,
-        "href": "https://docs.uselotus.xyz/admin"
       },
       {
         "tab": "Changelog",

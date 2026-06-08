@@ -1,11 +1,11 @@
 ---
 title: "Observability layer"
-description: "How Lotus records execution evidence without leaking secrets."
+description: "How Lotus records execution evidence safely."
 ---
 
-The observability layer records enough evidence to debug and audit Lotus behavior.
+The observability layer records enough evidence to explain and audit Lotus behavior.
 
-It should not store or expose secrets.
+It should protect sensitive credentials and user data while still making execution outcomes understandable.
 
 ## What Lotus observes
 
@@ -20,7 +20,7 @@ Lotus records:
 - Surplus and fee calculation versions.
 - Error codes and blocker categories.
 
-These records help operators explain why a route was selected, blocked, filled, or failed.
+These records help Lotus explain why a route was selected, blocked, filled, or failed.
 
 ## What Lotus redacts
 
@@ -28,12 +28,12 @@ Logs and traces should not include:
 
 - API keys.
 - Private keys.
-- HMAC secrets.
+- Webhook signing secrets.
 - Raw signed payloads.
 - Database URLs.
 - Provider auth headers.
 - User session tokens.
-- Full wallet secrets or recovery material.
+- Wallet recovery material.
 
 Where possible, logs should store stable references and hashes instead of raw sensitive values.
 
@@ -50,14 +50,8 @@ For an execution, Lotus should be able to reconstruct:
 - The final accounting outcome.
 - The fee policy version.
 
-This supports transparency without exposing private infrastructure details.
-
-## Public versus internal observability
-
-Public docs can describe the categories Lotus records.
-
-Internal runbooks can describe where logs live, who can access them, and how operators query them. Those internal details should not be published in public documentation.
+This supports transparency while keeping sensitive implementation details out of user-facing surfaces.
 
 <Warning>
-  Observability should help explain execution, not leak credentials or production topology.
+  Observability should help explain execution, not expose credentials or sensitive user data.
 </Warning>
