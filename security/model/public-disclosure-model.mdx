@@ -1,0 +1,92 @@
+---
+title: "Public disclosure model"
+description: "How Lotus documents security and architecture without exposing operational secrets."
+---
+
+Lotus documentation should be transparent about the security model, but not expose operational details that help an attacker.
+
+The public docs are a design and integration contract. They are not a deployment map.
+
+## What Lotus should disclose
+
+Public docs should explain:
+
+- System responsibilities by layer.
+- User-facing state machines.
+- API authentication model.
+- Rate-limit behavior at a policy level.
+- Execution safety invariants.
+- Routeability and fail-closed rules.
+- Surplus and fee calculation formulas.
+- Settlement verification requirements.
+- Webhook and request signing patterns.
+- Incident response process at a high level.
+- Security assumptions and known risk categories.
+
+This helps users, builders, auditors, and liquidity partners understand how Lotus behaves.
+
+## What Lotus should not disclose
+
+Public docs should not include:
+
+- Production host IPs.
+- Private network topology.
+- Internal service names that are not public API products.
+- Database connection strings.
+- Provider account IDs.
+- Raw environment variable values.
+- API keys, HMAC secrets, private keys, or relay keys.
+- Exact WAF rules or abuse thresholds.
+- Exact detection thresholds for fraud or rate-limit bypass.
+- Secret rotation schedules.
+- Internal admin runbooks with privileged commands.
+- Raw signed payloads or full provider responses.
+- Exploit payloads that are not needed to explain a mitigation.
+
+Use placeholders for examples:
+
+```text
+LOTUS_API_KEY=<your_api_key>
+X-Lotus-Signature=<webhook_signature>
+```
+
+Do not use real keys, real wallet private keys, real database URLs, or production-only identifiers.
+
+## Good transparency
+
+Good transparency explains the control.
+
+Example:
+
+```text
+Execution scope tokens are single-use, time-bound, and bound to route, side, size, price band, and venue set.
+```
+
+This is safe to publish because it describes the security invariant, not the secret material used to enforce it.
+
+## Bad transparency
+
+Bad transparency exposes implementation material that should stay private.
+
+Avoid publishing:
+
+- Exact production queue names.
+- Internal relay credentials.
+- Real admin endpoint secrets.
+- Full infrastructure diagrams with private hosts.
+- Raw logs that include tokens or signatures.
+
+## Review checklist
+
+Before publishing security or architecture docs, check:
+
+- Does this help a builder integrate safely?
+- Does this help a user understand trust boundaries?
+- Does this reveal a secret, host, key, or private account?
+- Does this reveal an abuse threshold that can be gamed?
+- Does this expose a privileged operator workflow?
+- Can the example use placeholders instead?
+
+<Warning>
+  If a detail is useful mainly to operate or attack production infrastructure, keep it out of public docs.
+</Warning>

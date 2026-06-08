@@ -3,4 +3,52 @@ title: "Funding security"
 description: "How Lotus protects funding readiness and venue balances."
 ---
 
-Funding intents are signed, scoped to a venue and amount, and reconciled with on-venue balances before they back execution.
+Funding security protects the money and positions that back execution.
+
+Lotus separates visible balances from venue-ready balances. A balance can appear in the account view before a specific venue route is ready to use it.
+
+## Funding controls
+
+Lotus should enforce:
+
+- Deposit and withdrawal state tracking.
+- Venue activation checks.
+- Venue-ready balance checks.
+- Sellable position verification.
+- In-flight order reservations.
+- Settlement reconciliation before release.
+- Idempotent funding updates.
+
+Execution should never rely only on frontend-visible balance.
+
+## Withdrawal safety
+
+Withdrawals should use available funds only.
+
+Funds should not be withdrawable when they are:
+
+- Reserved for a pending order.
+- Waiting for settlement verification.
+- Locked by a venue readiness step.
+- Already part of an in-flight withdrawal.
+
+## Public disclosure boundary
+
+Safe to disclose:
+
+- Balance categories.
+- Readiness state categories.
+- User-facing funding flow.
+- High-level withdrawal safety rules.
+
+Do not disclose:
+
+- Private wallet keys.
+- Internal signer setup.
+- Raw funding provider credentials.
+- Privileged operator recovery commands.
+- Exact internal wallet topology.
+
+<Note>
+  Funding readiness is an execution gate. Display balances are not execution authority.
+</Note>
